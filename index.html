@@ -466,7 +466,7 @@
 </div>
 
 <script>
-const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec?action=api";
+const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";
 const REFRESH_MS = 20000;
 
 const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";    
@@ -718,7 +718,8 @@ function calculate(){
   let label = selected.textContent;
 
   if (category === "silver"){
-    
+    // เปลี่ยนตรรกะตามสูตรใหม่ที่คุณให้มา: ราคาต่อกรัม = trunc((ราคาต่อบาท - 170) * 0.99 * 0.0656)
+    // หมายเหตุ: basePrice มาจาก lastSilverBuyBaht ซึ่งหัก -100 มาจากหลังบ้านเรียบร้อยแล้ว
     pricePerGram = Math.trunc((basePrice - 150) * 0.99 * 0.0656);
     result = Math.trunc(pricePerGram * (percent / 100) * weight);
   } else if (type === "ornament"){
