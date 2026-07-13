@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-<title>คำนวณราคาเงิน ทอง Demo</title>
+<title>โปรแกรมคำนวนราคารับซื้อทอง/เงิน หน้าร้าน</title>
 <style>
   :root{
     --bg:#1a0708; --card:#fff9e6; --gold:#e0c068; --gold2:#ffec9c;
@@ -175,7 +175,7 @@
 </head>
 <body>
 
-<h1>จงรักหลอมทอง ระบบคำนวณราคาขาย</h1>
+<h1>จงรักหลอมทอง ระบบคำนวณราคาขายหน้าร้าน</h1>
 <div class="datetime-header" id="currentDateTime">กำลังโหลดเวลา...</div>
 
 <div class="wrap">
@@ -260,7 +260,7 @@
           <option value="smelted" data-category="gold">ทองหลอม</option>
           <option value="bar" data-category="gold">ทองคำแท่ง 96.5%</option>
           <option value="ornament" data-category="gold">ทองรูปพรรณ</option>
-          <option value="silver_kg" data-category="silver">เงินแท่ง 99.99% (กก.)</option>
+          <option value="silver_kg" data-category="silver">เงินแท่ง 99.99% </option>
         </select>
       </div>
     </div>
@@ -392,7 +392,7 @@
 
     <div class="q-header">
       <div class="q-shop">
-        <div><img src="lhttps://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd" alt="Logo" style="width: 56px; height: auto;"></div>
+        <div><img src="https://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd" alt="Logo" style="width: 56px; height: auto;"></div>
         <div>
           <h2 style="color: #b8902a;" id="qShopTitle">จงรักหลอมทอง</h2>
           <p>ที่อยู่ เลขที่ 313 ถนนอภิบาลบัญชา อำเภอเมือง จังหวัดนครพนม 48000<br>
@@ -545,8 +545,6 @@ function renderChangeBox(valEl, boxEl, diff, suffix){
 async function loadPrices() {
   try {
     const data = await fetchJson(PROXY_URL);
-
-    // ทำความสะอาดและแปลงค่าเป็นตัวเลขเพื่อความปลอดภัยของสคริปต์
     const cleanGoldBid = parseFloat(String(data.gold_bid).replace(/,/g, '')) || 0;
     const cleanGoldAsk = parseFloat(String(data.gold_ask).replace(/,/g, '')) || 0;
     
@@ -555,26 +553,23 @@ async function loadPrices() {
     priceEl.ornBuy.textContent = parseFloat(data.silver_bid_kg).toLocaleString("th-TH") + " บาท";
     priceEl.ornSell.textContent = parseFloat(data.silver_ask_kg).toLocaleString("th-TH") + " บาท";
 
-    // คำนวณราคาทองต่อกรัมขึ้นแสดงบนหน้าเว็บ (ราคาซื้อฐาน หารด้วยน้ำหนักมาตรฐาน 15.244 กรัม ปัดเศษทิ้ง)
     if(cleanGoldBid > 0) {
        document.getElementById("goldPerGram").textContent = Math.trunc(cleanGoldBid / 15.244).toLocaleString("th-TH") + " บาท/กรัม";
     }
 
     lastGoldBuyPrice = cleanGoldBid;
     lastSilverBuyBaht = parseFloat(data.silver_bid_baht) || 0;
-
-    // ราคาเงินขึ้นหน้าเว็บเป็นจำนวนกรัม (อ้างอิงตรงจากหลังบ้าน)
     priceEl.silverGram.textContent = parseFloat(data.silver_per_gram).toLocaleString("th-TH") + " บาท/กรัม";
 
     const currentCategory = goldTypeSelect.options[goldTypeSelect.selectedIndex].dataset.category;
     if (currentCategory === "silver") {
-      goldPriceInput.value = lastSilverBuyBaht;
+      const cleanSilverKg = parseFloat(data.silver_bid_kg) || 0;
+      goldPriceInput.value = Math.trunc((cleanSilverKg / 1000) * 15.66);
     } else {
       goldPriceInput.value = lastGoldBuyPrice;
     }
     calculate();
 
-    // อัปเดตกล่องสถานะทองและเงินล่าสุดตามเงื่อนไขที่กำหนด
     const todayDiff = parseFloat(String(data.gold_diff || "").replace(/,/g, '')) || 0;
     const state = updateChangeTracking(lastGoldBuyPrice, parseFloat(data.silver_bid_kg));
     
@@ -582,7 +577,6 @@ async function loadPrices() {
     renderChangeBox(document.getElementById("valSilver"), document.getElementById("boxSilver"), state.silverDiff, state.silverCount ? ("(เคลื่อนไป " + state.silverCount + " ครั้ง)") : "");
 
     const now = new Date();
-    // ตรงอัปเดต ให้ใส่วันที่ เวลาที่อัปเดตตามคำสั่ง
     priceEl.update.textContent = "อัปเดตล่าสุด: " + now.toLocaleDateString("th-TH") + " เวลา " + now.toLocaleTimeString("th-TH", {hour:"2-digit",minute:"2-digit",second:"2-digit"}) + " น.";
   } catch (err) {
     priceEl.update.textContent = "อัปเดตขัดข้อง: (" + err.message + ")";
@@ -676,7 +670,11 @@ function updateFormFields(){
     addonField.style.display = "none";
     addonPriceInput.value = 0;
     percentInput.value = 99.99;
-    goldPriceInput.value = lastSilverBuyBaht;
+    
+    const silverPriceKg = parseFloat(String(document.getElementById("ornBuy").textContent).replace(/,/g, '')) || 0;
+    const silverBaseBaht = Math.trunc((silverPriceKg / 1000) * 15.66);
+    
+    goldPriceInput.value = silverBaseBaht;
   } else {
     goldPriceLabel.textContent = "ราคาทองรับซื้อฐาน (บาท)";
     weightLabel.textContent = "น้ำหนักทอง (กรัม)";
@@ -718,9 +716,7 @@ function calculate(){
   let label = selected.textContent;
 
   if (category === "silver"){
-    // เปลี่ยนตรรกะตามสูตรใหม่ที่คุณให้มา: ราคาต่อกรัม = trunc((ราคาต่อบาท - 170) * 0.99 * 0.0656)
-    // หมายเหตุ: basePrice มาจาก lastSilverBuyBaht ซึ่งหัก -100 มาจากหลังบ้านเรียบร้อยแล้ว
-    pricePerGram = Math.trunc((basePrice - 150) * 0.99 * 0.0656);
+    pricePerGram = (basePrice - 150) * 0.99 * 0.0656;
     result = Math.trunc(pricePerGram * (percent / 100) * weight);
   } else if (type === "ornament"){
     pricePerGram = basePrice / ORNAMENT_UNIT_DIVISOR;
