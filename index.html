@@ -22,11 +22,10 @@
     -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   }
   .datetime-header{text-align:center;font-size:14px;color:#f1dca6cc;margin-bottom:20px;}
-  /* ขยายหน้าเว็บแบบเต็มจอ */
   .wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
   .panel{
     background:linear-gradient(145deg,#6a0b12,#3b070b 60%,#200204);
-    border:1.6px solid transparent;
+    border:1px solid transparent;
     background-clip:padding-box;
     border-radius:16px; padding:18px;
     box-shadow:0 0 24px rgba(212,175,55,.2);
@@ -49,13 +48,12 @@
   .price-card .row{display:flex;justify-content:space-between;font-size:14px;margin:4px 0;align-items:center}
   .price-card .val{font-weight:800;font-size:20px}
 
-  /* ส่วนตกแต่งกล่องแสดงการเปลี่ยนแปลงราคาทองและเงิน (แยกกล่องอิสระ) */
-  .gold-change-container{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;margin-top:14px;padding-top:14px;border-top:1px dashed #ebdca533}
-  .change-box{background:rgba(0,0,0,0.25);padding:12px 16px;border-radius:12px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);}
-  .box-down{border:1.2px solid rgba(255,107,107,0.4);color:#ff6b6b}
-  .box-up{border:1.2px solid rgba(81,207,102,0.4);color:#51cf66}
+  .gold-change-container{display:grid;grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));gap:14px;margin-top:14px;padding-top:14px; }
+  .change-box{display:flex;flex-direction:column;gap:4px;}
+  .box-down{color:#ff6b6b}
+  .box-up{color:#51cf66}
   .change-box .title{font-size:13px;color:#f1dca6b3;}
-  .change-box .value{font-size:22px;font-weight:800;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .change-box .value{font-size:18px;font-weight:800;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
   .change-box .subtext{font-size:12px;color:#f1dca67a;font-weight:normal;}
 
   .update-time{margin-top:12px;font-size:12.5px;color:#f1dca6cc;text-align:right}
@@ -91,10 +89,9 @@
     padding-top:10px;border-top:1px dashed #b8902a55}
   .empty{color:#f1dca6aa;font-size:13.5px;text-align:center;padding:10px 0}
 
-  /* modal */
   .modal-bg{
     position:fixed;inset:0;background:#000000c0;display:none;
-    align-items:center;justify-content:center;padding:16px;z-index:50;
+    align-items:flex-start;justify-content:center;padding:24px 16px;z-index:50;
     overflow:auto;
   }
   .modal-bg.show{display:flex}
@@ -103,10 +100,16 @@
     padding:22px;max-height:88vh;overflow:auto;
   }
 
-  /* ===== ใบเสนอราคา (Quotation Paper) ===== */
   .quotation-paper{
-    max-width:760px;background:#fffdf7;font-size:13px;line-height:1.55;
-    padding:26px 24px;
+    width:210mm;min-height:297mm;max-width:210mm;
+    background:#ffffff;font-size:13px;line-height:1.55;
+    padding:18mm 15mm;margin:0 auto;
+    box-sizing:border-box;max-height:none;
+    display:flex;flex-direction:column;
+    box-shadow:0 6px 24px rgba(0,0,0,.4);
+  }
+  @media (max-width:860px){
+    .quotation-paper{width:100%;min-height:0;padding:16px;}
   }
   .q-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
     border-bottom:2px solid #c9a13b;padding-bottom:12px;margin-bottom:14px;}
@@ -154,23 +157,34 @@
   .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
 
   @media print{
+    @page{size:A4;margin:0;}
     body *{visibility:hidden;}
     #quotationPaper, #quotationPaper *{visibility:visible;}
-    #quotationPaper{position:absolute;left:0;top:0;width:100%;margin:0;box-shadow:none;max-width:100%;}
+    #quotationPaper{position:absolute;left:0;top:0;width:210mm;min-height:297mm;margin:0;box-shadow:none;padding:15mm;}
     .modal-bg{position:static !important;background:none !important;padding:0 !important;display:block !important;}
     .no-print{display:none !important;}
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .live-pulse {
+    animation: blink 1.5s infinite ease-in-out;
   }
 </style>
 </head>
 <body>
 
-<h1>Demo ระบบคำนวณราคาเงิน / ทอง  </h1>
+<h1>จงรักหลอมทอง ระบบคำนวณราคาขาย</h1>
 <div class="datetime-header" id="currentDateTime">กำลังโหลดเวลา...</div>
 
 <div class="wrap">
 
   <div class="panel">
-    <h2>ราคาทองคำและเงินวันนี้</h2>
+    <h2>ราคาทองคำและราคาเงินวันนี้&nbsp;&nbsp;&nbsp;
+        <span class="live-pulse" style="background-color: #dc2626; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; display: inline-block;">
+      LIVE
+    </span></h2> 
     <div class="price-grid">
       <div class="price-card">
         <h3>ทองคำแท่ง 96.5%</h3>
@@ -182,9 +196,13 @@
           <span>ขายออก</span>
           <span class="val" id="barSell">กำลังโหลด...</span>
         </div>
+        <div class="row" style="margin-top:8px; border-top:1px dashed #ebdca5; padding-top:6px; font-size:12.5px;">
+          <span style="color:var(--muted)">ราคาต่อกรัม:</span>
+          <span id="goldPerGram" style="font-weight:700;color : #1a73e8;">- บาท/กรัม</span>
+        </div>
       </div>
       <div class="price-card">
-        <h3>เงินแท่ง 99.99% (บาท / Kg)</h3>
+        <h3>เงินแท่ง 99.99% </h3>
         <div class="row">
           <span>รับซื้อ</span>
           <span class="val" id="ornBuy" style="color : #e0a800; font-weight:700"> กำลังโหลด...</span>
@@ -195,23 +213,20 @@
         </div>
         <div class="row" style="margin-top:8px; border-top:1px dashed #ebdca5; padding-top:6px; font-size:12.5px;">
           <span style="color:var(--muted)">ราคาต่อกรัม:</span>
-          <span id="silverPerGram" style="font-weight:700;color : #e0a800;">- บาท/กรัม</span>
+          <span id="silverPerGram" style="font-weight:700;color : #1a73e8;">- บาท/กรัม</span>
         </div>
+        <div style="text-align: right; font-size: 10px; color: #7a6a45; font-style: italic; margin-top: 2px;">* ราคาขายออกยังไม่รวม VAT</div>
       </div>
     </div>
 
     <div class="gold-change-container">
       <div class="change-box" id="boxToday">
-        <span class="title">วันนี้:</span>
+        <span class="title">ทองล่าสุด:</span>
         <div class="value" id="valToday">กำลังโหลด...</div>
       </div>
       <div class="change-box" id="boxSilver">
         <span class="title">เงินล่าสุด:</span>
         <div class="value" id="valSilver">กำลังโหลด...</div>
-      </div>
-      <div class="change-box" id="boxGold">
-        <span class="title">ทองล่าสุด:</span>
-        <div class="value" id="valGold">กำลังโหลด...</div>
       </div>
     </div>
 
@@ -220,6 +235,20 @@
 
   <div class="panel">
     <h2>คำนวณราคาประเมินหน้าร้าน</h2>
+    
+    <div class="calc-row" style="margin-bottom:14px;">
+      <div class="field">
+        <label style="color:var(--gold2); font-weight:700;">เลือกสาขา / ผู้ทำรายการ *</label>
+        <select id="branchSelect">
+          <option value="สาขาธาตุพนม">สาขาธาตุพนม</option>
+          <option value="สาขานครพนม" selected>สาขานครพนม</option>
+          <option value="สาขาท่าแขก">สาขาท่าแขก</option>
+          <option value="คุณหนึ่ง">คุณหนึ่ง</option>
+          <option value="คุณสอง">คุณสอง</option>
+        </select>
+      </div>
+    </div>
+
     <div class="calc-row">
       <div class="field">
         <label id="goldPriceLabel">ราคาทอง / เงิน </label>
@@ -231,11 +260,17 @@
           <option value="smelted" data-category="gold">ทองหลอม</option>
           <option value="bar" data-category="gold">ทองคำแท่ง 96.5%</option>
           <option value="ornament" data-category="gold">ทองรูปพรรณ</option>
-          <option value="all" data-category="gold">ทองทั้งหมด</option>
-          <option value="9k" data-category="gold">ทอง 9K</option>
-          <option value="14k" data-category="gold">ทอง 14K</option>
-          <option value="18k" data-category="gold">ทอง 18K</option>
           <option value="silver_kg" data-category="silver">เงินแท่ง 99.99% (กก.)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="calc-row" id="smeltedTypeRow" style="display:none;">
+      <div class="field">
+        <label>ประเภทลูกค้า</label>
+        <select id="smeltedType">
+          <option value="retail">ค้าปลีก </option>
+          <option value="wholesale">ค้าส่ง</option>
         </select>
       </div>
     </div>
@@ -257,9 +292,47 @@
       </div>
     </div>
 
+    <div class="calc-row" id="ornamentRow" style="display:none;">
+      <div class="field">
+        <label>หน่วยน้ำหนัก</label>
+        <select id="ornamentUnit">
+          <option value="baht">บาท</option>
+          <option value="salung">สลึง</option>
+          <option value="custom">ระบุน้ำหนัก</option>
+        </select>
+      </div>
+      <div class="field" id="ornamentBahtField">
+        <label>เลือกจำนวนบาททอง</label>
+        <select id="ornamentBaht">
+          <option value="15.16">1 บาท</option>
+          <option value="30.32">2 บาท</option>
+          <option value="45.48">3 บาท</option>
+          <option value="60.64">4 บาท</option>
+          <option value="75.80">5 บาท</option>
+        </select>
+      </div>
+      <div class="field" id="ornamentSalungField" style="display:none;">
+        <label>เลือกจำนวนสลึง</label>
+        <select id="ornamentSalung">
+          <option value="11.37">3 สลึง</option>
+          <option value="7.58">2 สลึง</option>
+          <option value="3.79">1 สลึง</option>
+          <option value="1.90">ครึ่งสลึง</option>
+        </select>
+      </div>
+      <div class="field" id="ornamentCustomField" style="display:none;">
+        <label>ระบุน้ำหนักเอง (กรัม)</label>
+        <input type="number" id="ornamentCustomWeight" value="15.16" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label>จำนวน (ชิ้น)</label>
+        <input type="number" id="ornamentQty" value="1" min="1" step="1">
+      </div>
+    </div>
+
     <div class="calc-row" id="percentRow">
       <div class="field" id="percentField">
-        <label>เปอร์เซ็นต์ทอง/ เงิน (%)</label>
+        <label>เปอร์เซ็นต์ทอง / เงิน (%)</label>
         <input type="number" id="percent" value="90" min="0" max="100" step="0.01">
       </div>
       <div class="field" id="addonField">
@@ -267,7 +340,7 @@
         <input type="number" id="addonPrice" value="0" step="1">
       </div>
     </div>
-    <div class="calc-row">
+    <div class="calc-row" id="weightRow">
       <div class="field">
         <label id="weightLabel">น้ำหนักทอง (กรัม)</label>
         <input type="number" id="weight" value="1" min="0" step="0.01">
@@ -289,9 +362,26 @@
       <span>ยอดรวมสุทธิจ่ายออก</span>
       <span id="cartTotal">0.00 บาท</span>
     </div>
+
+    <div class="calc-row" style="margin-top:16px;border-top:1px dashed #b8902a55;padding-top:14px;">
+      <div class="field" style="flex:2;min-width:200px;">
+        <label>ชื่อลูกค้า (ถ้ามี)</label>
+        <input type="text" id="customerName" placeholder="พิมพ์ชื่อลูกค้า หรือข้ามได้">
+      </div>
+      <div class="field" style="flex:1;min-width:150px;">
+        <label>เบอร์โทร</label>
+        <input type="text" id="customerPhone" placeholder="08xxxxxxxx">
+      </div>
+      <div class="field" style="flex:0 0 auto;justify-content:flex-end;">
+        <label>&nbsp;</label>
+        <button class="btn-outline" id="findCustomerBtn" type="button"> ค้นหาจากฐานข้อมูล</button>
+      </div>
+    </div>
+    <div id="customerLookupStatus" style="font-size:12px;color:#f1dca6aa;margin-top:4px;"></div>
+
     <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
       <button class="btn-outline" id="clearCartBtn">ล้างรายการบิล</button>
-      <button class="btn-gold" id="previewBtn" style="margin-left:auto">สร้างใบเสนอราคา (พรีวิว)</button>
+      <button class="btn-gold" id="previewBtn" style="margin-left:auto">สร้างใบเสนอราคา</button>
     </div>
   </div>
 
@@ -302,11 +392,11 @@
 
     <div class="q-header">
       <div class="q-shop">
-        <div class="q-logo">🥇</div>
+        <div><img src="logo.png" alt="Logo" style="width: 56px; height: auto;"></div>
         <div>
-          <h1>ร้านจงรักหลอมทอง สาขานครพนม</h1>
-          <p>ที่อยู่ ......................................... อำเภอเมือง จังหวัดนครพนม 48000<br>
-             โทร: 08X-XXX-XXXX | LINE: @xxxxx</p>
+          <h2 style="color: #b8902a;" id="qShopTitle">จงรักหลอมทอง</h2>
+          <p>ที่อยู่ เลขที่ 313 ถนนอภิบาลบัญชา อำเภอเมือง จังหวัดนครพนม 48000<br>
+             โทร: 092-823-9355 | LINE: @jongrak99</p>
         </div>
       </div>
       <div class="q-doctitle">
@@ -318,9 +408,9 @@
     <div class="q-info-grid">
       <div>
         <div class="q-info-title">ลูกค้า (CUSTOMER)</div>
-        <div class="q-info-row"><span>ชื่อลูกค้า:</span><span class="dots"></span></div>
-        <div class="q-info-row"><span>ที่อยู่:</span><span class="dots"></span></div>
-        <div class="q-info-row"><span>โทรศัพท์:</span><span class="dots"></span></div>
+        <div class="q-info-row"><span>ชื่อลูกค้า:</span><span id="qCustomerName" class="dots"></span></div>
+        <div class="q-info-row"><span>ที่อยู่:</span><span id="qCustomerAddress" class="dots"></span></div>
+        <div class="q-info-row"><span>โทรศัพท์:</span><span id="qCustomerPhone" class="dots"></span></div>
       </div>
       <div>
         <div class="q-info-title">ข้อมูลเอกสาร (DOCUMENT)</div>
@@ -341,7 +431,7 @@
 
     <div class="q-summary-title">สรุปยอดแยกตามประเภททอง (STOCK SUMMARY)</div>
     <table class="q-summary">
-      <thead><tr><th>รายการ (ประเภททอง)</th><th>น้ำหนัก (กรัม)</th><th>ราคา (บาท)</th></tr></thead>
+      <thead><tr><th>รายการ </th><th>น้ำหนัก (กรัม)</th><th>ราคา (บาท)</th></tr></thead>
       <tbody id="qSummaryBody"></tbody>
     </table>
 
@@ -368,15 +458,19 @@
     </div>
 
     <div class="modal-actions no-print">
-      <button class="btn-outline" id="closePreviewBtn">ปิด</button>
+      <button class="btn-danger" id="closePreviewBtn">ปิด</button>
+      <button class="btn-gold" id="saveToSheetBtn">บันทึกบิลลงระบบ</button>
       <button class="btn-gold" id="printPreviewBtn">พิมพ์ / บันทึก PDF</button>
     </div>
   </div>
 </div>
 
 <script>
-const PROXY_URL = "gold-proxy.php?action=api";
+const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec?action=api";
 const REFRESH_MS = 20000;
+
+const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";    
+const CUSTOMER_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec"; 
 
 const priceEl = {
   barBuy: document.getElementById("barBuy"),
@@ -397,9 +491,9 @@ async function fetchJson(url) {
 }
 
 /* =========================================================
-   ติดตามค่าการเปลี่ยนแปลงราคา (ทอง/เงิน) รายวัน
+   ติดตามค่าการเปลี่ยนแปลงราคา (ทอง/เงิน) รายวัน + เพิ่มตัวนับทองล่าสุดตามเงิน
    ========================================================= */
-const CHANGE_KEY = "gold_price_changes_v1";
+const CHANGE_KEY = "gold_price_changes_v2";
 
 function todayStr(){
   const d = new Date();
@@ -424,12 +518,12 @@ function updateChangeTracking(goldPrice, silverPrice){
   const state = loadChangeState();
   if (state.goldLast !== null && goldPrice !== state.goldLast){
     state.goldDiff = goldPrice - state.goldLast;
-    state.goldCount++;
+    state.goldCount++; // นับการเคลื่อนไหวราคาทอง
   }
   state.goldLast = goldPrice;
   if (state.silverLast !== null && silverPrice !== state.silverLast){
     state.silverDiff = silverPrice - state.silverLast;
-    state.silverCount++;
+    state.silverCount++; // นับการเคลื่อนไหวราคาเงิน
   }
   state.silverLast = silverPrice;
   saveChangeState(state);
@@ -437,6 +531,7 @@ function updateChangeTracking(goldPrice, silverPrice){
 }
 
 function renderChangeBox(valEl, boxEl, diff, suffix){
+  if(!boxEl || !valEl) return; // ป้องกันข้อผิดพลาดกรณี Element ไม่มีอยู่จริง
   boxEl.classList.remove("box-up", "box-down");
   const up = diff > 0, down = diff < 0;
   if (up) boxEl.classList.add("box-up");
@@ -451,16 +546,25 @@ async function loadPrices() {
   try {
     const data = await fetchJson(PROXY_URL);
 
-    priceEl.barBuy.textContent = data.gold_bid + " บาท";
-    priceEl.barSell.textContent = data.gold_ask + " บาท";
-    priceEl.ornBuy.textContent = data.silver_bid_kg + " บาท";
-    priceEl.ornSell.textContent = data.silver_ask_kg + " บาท";
+    // ทำความสะอาดและแปลงค่าเป็นตัวเลขเพื่อความปลอดภัยของสคริปต์
+    const cleanGoldBid = parseFloat(String(data.gold_bid).replace(/,/g, '')) || 0;
+    const cleanGoldAsk = parseFloat(String(data.gold_ask).replace(/,/g, '')) || 0;
+    
+    priceEl.barBuy.textContent = cleanGoldBid.toLocaleString("th-TH") + " บาท";
+    priceEl.barSell.textContent = cleanGoldAsk.toLocaleString("th-TH") + " บาท";
+    priceEl.ornBuy.textContent = parseFloat(data.silver_bid_kg).toLocaleString("th-TH") + " บาท";
+    priceEl.ornSell.textContent = parseFloat(data.silver_ask_kg).toLocaleString("th-TH") + " บาท";
 
-    lastGoldBuyPrice = parseFloat(String(data.gold_bid).replace(/,/g, '')) || 40000;
-    lastSilverBuyBaht = parseFloat(String(data.silver_bid_baht).replace(/,/g, '')) || 0;
+    // คำนวณราคาทองต่อกรัมขึ้นแสดงบนหน้าเว็บ (ราคาซื้อฐาน หารด้วยน้ำหนักมาตรฐาน 15.244 กรัม ปัดเศษทิ้ง)
+    if(cleanGoldBid > 0) {
+       document.getElementById("goldPerGram").textContent = Math.trunc(cleanGoldBid / 15.244).toLocaleString("th-TH") + " บาท/กรัม";
+    }
 
-    const silverPerGramCalc = Math.trunc((lastSilverBuyBaht - 50) * 0.99 * 0.0656);
-    priceEl.silverGram.textContent = silverPerGramCalc.toLocaleString("th-TH") + " บาท/กรัม";
+    lastGoldBuyPrice = cleanGoldBid;
+    lastSilverBuyBaht = parseFloat(data.silver_bid_baht) || 0;
+
+    // ราคาเงินขึ้นหน้าเว็บเป็นจำนวนกรัม (อ้างอิงตรงจากหลังบ้าน)
+    priceEl.silverGram.textContent = parseFloat(data.silver_per_gram).toLocaleString("th-TH") + " บาท/กรัม";
 
     const currentCategory = goldTypeSelect.options[goldTypeSelect.selectedIndex].dataset.category;
     if (currentCategory === "silver") {
@@ -470,17 +574,18 @@ async function loadPrices() {
     }
     calculate();
 
-    // อัปเดตกล่องแสดงการเปลี่ยนแปลงราคา
+    // อัปเดตกล่องสถานะทองและเงินล่าสุดตามเงื่อนไขที่กำหนด
     const todayDiff = parseFloat(String(data.gold_diff || "").replace(/,/g, '')) || 0;
-    const state = updateChangeTracking(lastGoldBuyPrice, lastSilverBuyBaht);
-    renderChangeBox(document.getElementById("valToday"), document.getElementById("boxToday"), todayDiff, "");
-    renderChangeBox(document.getElementById("valSilver"), document.getElementById("boxSilver"), state.silverDiff, state.silverCount ? ("(ครั้งที่ " + state.silverCount + ")") : "");
-    renderChangeBox(document.getElementById("valGold"), document.getElementById("boxGold"), state.goldDiff, state.goldCount ? ("(ครั้งที่ " + state.goldCount + ")") : "");
+    const state = updateChangeTracking(lastGoldBuyPrice, parseFloat(data.silver_bid_kg));
+    
+    renderChangeBox(document.getElementById("valToday"), document.getElementById("boxToday"), todayDiff, state.goldCount ? ("(เคลื่อนไป " + state.goldCount + " ครั้ง)") : "");
+    renderChangeBox(document.getElementById("valSilver"), document.getElementById("boxSilver"), state.silverDiff, state.silverCount ? ("(เคลื่อนไป " + state.silverCount + " ครั้ง)") : "");
 
     const now = new Date();
-    priceEl.update.textContent = "อัปเดต : " + now.toLocaleTimeString("th-TH", {hour:"2-digit",minute:"2-digit"}) + " น.";
+    // ตรงอัปเดต ให้ใส่วันที่ เวลาที่อัปเดตตามคำสั่ง
+    priceEl.update.textContent = "อัปเดตล่าสุด: " + now.toLocaleDateString("th-TH") + " เวลา " + now.toLocaleTimeString("th-TH", {hour:"2-digit",minute:"2-digit",second:"2-digit"}) + " น.";
   } catch (err) {
-    priceEl.update.textContent = "อัปเดต : โหลดข้อมูลขัดข้อง (" + err.message + ")";
+    priceEl.update.textContent = "อัปเดตขัดข้อง: (" + err.message + ")";
   }
 }
 
@@ -496,6 +601,7 @@ const goldTypeSelect  = document.getElementById("goldType");
 const percentInput    = document.getElementById("percent");
 const addonPriceInput = document.getElementById("addonPrice");
 const weightInput     = document.getElementById("weight");
+const weightRow       = document.getElementById("weightRow");
 const weightLabel     = document.getElementById("weightLabel");
 const percentRow      = document.getElementById("percentRow");
 const addonField      = document.getElementById("addonField");
@@ -505,8 +611,22 @@ const goldSizeRow     = document.getElementById("goldSizeRow");
 const goldSizeSelect  = document.getElementById("goldSize");
 const goldQtyInput    = document.getElementById("goldQty");
 
+const smeltedTypeRow  = document.getElementById("smeltedTypeRow");
+const smeltedTypeSelect = document.getElementById("smeltedType");
+
+const ornamentRow          = document.getElementById("ornamentRow");
+const ornamentUnitSelect   = document.getElementById("ornamentUnit");
+const ornamentBahtField    = document.getElementById("ornamentBahtField");
+const ornamentBahtSelect   = document.getElementById("ornamentBaht");
+const ornamentSalungField  = document.getElementById("ornamentSalungField");
+const ornamentSalungSelect = document.getElementById("ornamentSalung");
+const ornamentCustomField  = document.getElementById("ornamentCustomField");
+const ornamentCustomWeight = document.getElementById("ornamentCustomWeight");
+const ornamentQtyInput     = document.getElementById("ornamentQty");
+
 const GOLD_MULTIPLIER = 0.0656;
-const K_PERCENT = { "9k": 37.5, "14k": 58.5, "18k": 75.0 };
+const ORNAMENT_UNIT_DIVISOR = 15.16; 
+const ORNAMENT_DEDUCT = 400;
 
 function formatNumber(n){
   return n.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -518,12 +638,34 @@ function calculateGoldWeight() {
   weightInput.value = (sizeValue * qty).toFixed(2);
 }
 
+function calculateOrnamentWeight(){
+  const unit = ornamentUnitSelect.value;
+  const qty = parseInt(ornamentQtyInput.value) || 0;
+  let unitWeight = 0;
+  if (unit === "baht") unitWeight = parseFloat(ornamentBahtSelect.value) || 0;
+  else if (unit === "salung") unitWeight = parseFloat(ornamentSalungSelect.value) || 0;
+  else unitWeight = parseFloat(ornamentCustomWeight.value) || 0;
+  weightInput.value = (unitWeight * qty).toFixed(2);
+}
+
+function updateOrnamentUnitFields(){
+  const unit = ornamentUnitSelect.value;
+  ornamentBahtField.style.display = unit === "baht" ? "" : "none";
+  ornamentSalungField.style.display = unit === "salung" ? "" : "none";
+  ornamentCustomField.style.display = unit === "custom" ? "" : "none";
+  calculateOrnamentWeight();
+  calculate();
+}
+
 function updateFormFields(){
   const selected = goldTypeSelect.options[goldTypeSelect.selectedIndex];
   const type = goldTypeSelect.value;
   const category = selected.dataset.category || "gold";
 
   goldSizeRow.style.display = "none";
+  smeltedTypeRow.style.display = "none";
+  ornamentRow.style.display = "none";
+  weightRow.style.display = "";
   weightInput.removeAttribute("readonly");
   percentRow.style.display = "";
   addonField.style.display = "";
@@ -546,14 +688,17 @@ function updateFormFields(){
       weightInput.setAttribute("readonly", "true");
       calculateGoldWeight();
       percentInput.value = 96.5;
-    } else if (type === "ornament") {
-      percentInput.value = 96.5;
+      addonPriceInput.value = 0;
     } else if (type === "smelted") {
+      smeltedTypeRow.style.display = "";
       percentInput.value = 90;
-    } else if (type === "all") {
-      percentInput.value = 90;
-    } else if (K_PERCENT[type]) {
-      percentInput.value = K_PERCENT[type];
+      addonPriceInput.value = smeltedTypeSelect.value === "wholesale" ? 500 : 0;
+    } else if (type === "ornament") {
+      percentRow.style.display = "none";
+      ornamentRow.style.display = "";
+      weightLabel.textContent = "น้ำหนักทอง (กรัม) [คำนวณอัตโนมัติ]";
+      weightInput.setAttribute("readonly", "true");
+      updateOrnamentUnitFields();
     }
   }
   calculate();
@@ -570,26 +715,40 @@ function calculate(){
 
   let pricePerGram = 0;
   let result = 0;
+  let label = selected.textContent;
 
   if (category === "silver"){
-    // เงิน = trunc((ราคาเงิน-50)*0.99*0.0656) ได้ราคาต่อกรัม
-    const basePerGram = Math.trunc((basePrice - 50) * 0.99 * 0.0656);
-    pricePerGram = Math.trunc(basePerGram * (percent / 100));
-    result = Math.trunc(pricePerGram * weight);
+    // เปลี่ยนตรรกะตามสูตรใหม่ที่คุณให้มา: ราคาต่อกรัม = trunc((ราคาต่อบาท - 170) * 0.99 * 0.0656)
+    // หมายเหตุ: basePrice มาจาก lastSilverBuyBaht ซึ่งหัก -100 มาจากหลังบ้านเรียบร้อยแล้ว
+    pricePerGram = Math.trunc((basePrice - 150) * 0.99 * 0.0656);
+    result = Math.trunc(pricePerGram * (percent / 100) * weight);
+  } else if (type === "ornament"){
+    pricePerGram = basePrice / ORNAMENT_UNIT_DIVISOR;
+    result = Math.round(pricePerGram * weight - ORNAMENT_DEDUCT);
   } else {
-    // ทองหลอม/ทองคำแท่ง/ทองรูปพรรณ/ทองทั้งหมด(รวมทอง K)
-    // = trunc(ราคาทอง * % * 0.0656) + ราคาบวก ได้ราคาต่อกรัม แล้ว trunc(ราคาต่อกรัม * นน) เป็นเงิน
-    pricePerGram = Math.trunc(basePrice * (percent / 100) * GOLD_MULTIPLIER) + addonPrice;
+    pricePerGram = Math.trunc((basePrice + addonPrice) * (percent / 100) * GOLD_MULTIPLIER);
     result = Math.trunc(pricePerGram * weight);
+    if (type === "smelted"){
+      label += smeltedTypeSelect.value === "wholesale" ? " (ค้าส่ง)" : " (ค้าปลีก)";
+    }
   }
 
   resultAmount.textContent = formatNumber(result) + " บาท";
-  return { type, label: selected.textContent, category, basePrice, percent, addon: addonPrice, pricePerGram, weight, result };
+  return { type, label, category, basePrice, percent, addon: addonPrice, pricePerGram, weight, result };
 }
 
 goldTypeSelect.addEventListener("change", updateFormFields);
 goldSizeSelect.addEventListener("change", () => { calculateGoldWeight(); calculate(); });
 goldQtyInput.addEventListener("input", () => { calculateGoldWeight(); calculate(); });
+smeltedTypeSelect.addEventListener("change", () => {
+  addonPriceInput.value = smeltedTypeSelect.value === "wholesale" ? 500 : 0;
+  calculate();
+});
+ornamentUnitSelect.addEventListener("change", updateOrnamentUnitFields);
+ornamentBahtSelect.addEventListener("change", () => { calculateOrnamentWeight(); calculate(); });
+ornamentSalungSelect.addEventListener("change", () => { calculateOrnamentWeight(); calculate(); });
+ornamentCustomWeight.addEventListener("input", () => { calculateOrnamentWeight(); calculate(); });
+ornamentQtyInput.addEventListener("input", () => { calculateOrnamentWeight(); calculate(); });
 
 [goldPriceInput, percentInput, addonPriceInput, weightInput].forEach(el =>
   el.addEventListener("input", calculate)
@@ -597,7 +756,7 @@ goldQtyInput.addEventListener("input", () => { calculateGoldWeight(); calculate(
 updateFormFields();
 
 /* =========================================================
-   ตะกร้าและใบเสนอราคาเดิม ทำงานปกติ
+   ตะกร้าและใบเสนอราคาเดิม
    ========================================================= */
 const CART_KEY = "gold_cart_demo";
 let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -644,9 +803,6 @@ document.getElementById("clearCartBtn").addEventListener("click", () => {
 });
 renderCart();
 
-/* =========================================================
-   ตัวแปลงตัวเลขเป็นข้อความจำนวนเงินบาท (Thai Baht Text)
-   ========================================================= */
 function ThaiBahtText(number){
   const txtNumArr = ["ศูนย์","หนึ่ง","สอง","สาม","สี่","ห้า","หก","เจ็ด","แปด","เก้า"];
   const txtDigitArr = ["","สิบ","ร้อย","พัน","หมื่น","แสน"];
@@ -697,10 +853,38 @@ function ThaiBahtText(number){
   return bahtText;
 }
 
-/* =========================================================
-   พรีวิวใบเสนอราคา (แบบกระดาษ)
-   ========================================================= */
 const previewModal = document.getElementById("previewModal");
+
+document.getElementById("findCustomerBtn").addEventListener("click", async () => {
+  const statusEl = document.getElementById("customerLookupStatus");
+  const phone = document.getElementById("customerPhone").value.trim();
+  const name = document.getElementById("customerName").value.trim();
+
+  if (!CUSTOMER_API_URL){
+    statusEl.textContent = "ยังไม่ได้ตั้งค่า CUSTOMER_API_URL";
+    return;
+  }
+  if (!phone && !name){
+    statusEl.textContent = "กรุณากรอกชื่อหรือเบอร์โทรก่อนค้นหา";
+    return;
+  }
+
+  statusEl.textContent = "กำลังค้นหา...";
+  try {
+    const params = new URLSearchParams({ action: "findCustomer", phone, name });
+    const data = await fetchJson(CUSTOMER_API_URL + "?" + params.toString());
+    if (data && data.found){
+      document.getElementById("customerName").value = data.name || name;
+      document.getElementById("customerPhone").value = data.phone || phone;
+      document.getElementById("customerName").dataset.address = data.address || "";
+      statusEl.textContent = "พบข้อมูลลูกค้า: " + (data.name || "-");
+    } else {
+      statusEl.textContent = "ไม่พบข้อมูลลูกค้า — ใช้ข้อมูลที่พิมพ์เองได้เลย";
+    }
+  } catch (err) {
+    statusEl.textContent = "ค้นหาไม่สำเร็จ: " + err.message;
+  }
+});
 
 function groupSummaryByType(items){
   const map = {};
@@ -716,6 +900,21 @@ document.getElementById("previewBtn").addEventListener("click", () => {
   if (cart.length === 0){ alert("บิลนี้ยังไม่มีรายการ กรุณากดคำนวณและบันทึกก่อน"); return; }
 
   document.getElementById("qDate").textContent = new Date().toLocaleDateString("th-TH", { year: "numeric", month: "long", day: "numeric" });
+
+  // นำชื่อสาขาที่ถูกเลือกปัจจุบันมาแสดงบนหัวกระดาษใบเสนอราคาตามเงื่อนไข
+  const selectedBranch = document.getElementById("branchSelect").value;
+  document.getElementById("qShopTitle").textContent = "จงรักหลอมทอง " + selectedBranch;
+
+  const custName = document.getElementById("customerName").value.trim();
+  const custPhone = document.getElementById("customerPhone").value.trim();
+  const custAddress = document.getElementById("customerName").dataset.address || "";
+
+  const qName = document.getElementById("qCustomerName");
+  const qPhone = document.getElementById("qCustomerPhone");
+  const qAddress = document.getElementById("qCustomerAddress");
+  qName.textContent = custName; qName.classList.toggle("dots", !custName);
+  qPhone.textContent = custPhone; qPhone.classList.toggle("dots", !custPhone);
+  qAddress.textContent = custAddress; qAddress.classList.toggle("dots", !custAddress);
 
   document.getElementById("qItemsBody").innerHTML = cart.map((item, i) => `
     <tr>
@@ -752,18 +951,74 @@ document.getElementById("previewBtn").addEventListener("click", () => {
 document.getElementById("closePreviewBtn").addEventListener("click", () => { previewModal.classList.remove("show"); });
 document.getElementById("printPreviewBtn").addEventListener("click", () => { window.print(); });
 
+async function saveTransaction(){
+  if (!SAVE_API_URL){
+    alert("ยังไม่ได้ตั้งค่า SAVE_API_URL");
+    return;
+  }
+  if (cart.length === 0){ alert("ไม่มีรายการในบิล"); return; }
+
+  const btn = document.getElementById("saveToSheetBtn");
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+
+  const total = cart.reduce((s, i) => s + i.result, 0);
+  const totalWeight = cart.reduce((s, i) => s + i.weight, 0);
+  
+  // ดึงสาขาที่เลือกปัจจุบันมาเก็บลง payload เพื่อไว้บันทึกประวัติลง Google Sheets ในอนาคต
+  const selectedBranch = document.getElementById("branchSelect").value;
+
+  const payload = {
+    action: "saveTransaction",
+    branch: selectedBranch,
+    customerName: document.getElementById("customerName").value.trim(),
+    customerPhone: document.getElementById("customerPhone").value.trim(),
+    date: new Date().toISOString(),
+    totalWeight: totalWeight,
+    totalAmount: total,
+    items: cart.map(it => ({
+      label: it.label,
+      type: it.type,
+      category: it.category,
+      basePrice: it.basePrice,
+      percent: it.percent,
+      addon: it.addon,
+      pricePerGram: it.pricePerGram,
+      weight: it.weight,
+      amount: it.result
+    }))
+  };
+
+  try {
+    const res = await fetch(SAVE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if (result && result.success){
+      alert("บันทึกบิลลงระบบเรียบร้อยแล้ว (เลขที่: " + (result.docId || "-") + ")");
+    } else {
+      alert("บันทึกไม่สำเร็จ: " + (result && result.error ? result.error : "ไม่ทราบสาเหตุ"));
+    }
+  } catch (err) {
+    alert("เกิดข้อผิดพลาดในการบันทึก: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+document.getElementById("saveToSheetBtn").addEventListener("click", saveTransaction);
+
 function updateDateTime() {
     const now = new Date();
     const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
         hour12: false
     };
-    document.getElementById('currentDateTime').innerText = 'วันเวลาปัจจุบัน: ' + now.toLocaleDateString('th-TH', options) + ' น.';
+    document.getElementById('currentDateTime').innerText = 'วันที่: ' + now.toLocaleDateString('th-TH', options) + ' น.';
 }
 setInterval(updateDateTime, 1000);
 updateDateTime();
