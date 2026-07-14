@@ -717,7 +717,7 @@ function calculate(){
   let label = selected.textContent;
 
   if (category === "silver"){
-    pricePerGram = (basePrice - 150) * 0.99 * 0.0656;
+     pricePerGram =Math.trunc ((basePrice - 120) * 0.99 * 0.0656);
     result = Math.trunc(pricePerGram * (percent / 100) * weight);
   } else if (type === "ornament"){
     pricePerGram = basePrice / ORNAMENT_UNIT_DIVISOR;
