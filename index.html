@@ -1019,7 +1019,10 @@ document.getElementById("addGoldToCartBtn").addEventListener("click", () => {
     weight,
     result: finalPrice,
     isEdited: finalPrice !== currentGoldCalculatedResult
-  }); 
+  });
+  goldTypeSelect.value = "smelted"; // คืนค่าประเภททองเป็น "ทองหลอม" (Default)
+  updateGoldFormView();             // เรียกฟังก์ชันนี้เพื่อเคลียร์น้ำหนักและคำนวณค่าเริ่มต้นใหม่
+  
   saveCart();
 });
 
@@ -1033,6 +1036,7 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
 
   const pGram = weight > 0 ? (finalPrice / weight) : 0;
 
+  // ... โค้ดส่วนบนของปุ่มเงินที่มีอยู่เดิม ...
   cart.push({
     type: "silver",
     label: "เงินแท่ง",
@@ -1046,6 +1050,11 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
     result: finalPrice,
     isEdited: finalPrice !== currentSilverCalculatedResult
   }); 
+  
+  // === จุดที่ต้องเพิ่มสำหรับฝั่งเงิน ===
+  weightSilverInput.value = 1; // คืนค่าน้ำหนักเงินเริ่มต้นเป็น 1 กรัม
+  calculateSilver();           // สั่งคำนวณราคาเริ่มต้นใหม่
+  
   saveCart();
 });
 
