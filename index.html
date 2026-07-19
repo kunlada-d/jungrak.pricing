@@ -723,29 +723,24 @@ async function loadPrices() {
     const cleanSilverAskKg = parseFloat(String(data.silver_ask_kg).replace(/,/g, '')) || 0;
     const cleanSilverPerGram = parseFloat(data.silver_per_gram) || 0;
     
-    // 1. อัปเดตราคาในกล่องแดชบอร์ดหลักบนหน้าจอ
     priceEl.barBuy.textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     priceEl.barSell.textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
     priceEl.ornBuy.textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿"; // โชว์ราคาเงินแท่งรับซื้อ
     priceEl.ornSell.textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿"; // โชว์ราคาเงินแท่งขายออก
 
-    // 2. อัปเดตราคา Ticker Bar ด้านบนแบบเรียลไทม์ (ตรงๆ ไม่สลับค่า)
     document.getElementById("tickerGoldBuy").textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerGoldSell").textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverBuy").textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverSell").textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿";
     
-    // ดึงชุดสำรองสำหรับบาร์วิ่งลื่นต่อเนื่อง
     document.getElementById("tickerGoldBuy2").textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerGoldSell2").textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverBuy2").textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverSell2").textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿";
 
-    // คำนวณราคาเฉลี่ยต่อกรัมของเงิน
     if (cleanSilverPerGram > 0) {
        priceEl.silverGram.textContent = cleanSilverPerGram.toLocaleString("th-TH") + " บาท/กรัม";
     } else if (cleanSilverKg > 0) {
-       // หากไม่มีค่าต่อกรัมตรงๆ ให้ใช้ราคาต่อกิโลหารด้วย 1000 เป็นค่าแทนชั่วคราว
        priceEl.silverGram.textContent = (cleanSilverKg / 1000).toLocaleString("th-TH") + " บาท/กรัม";
     }
 
@@ -756,7 +751,6 @@ async function loadPrices() {
     lastGoldBuyPrice = cleanGoldBid;
     lastSilverBuyBaht = parseFloat(data.silver_bid_baht) || 0;
 
-    // เซ็ตราคาฐานอัตโนมัติหากยังเป็นค่า Default
     if(document.getElementById("goldPrice").value == 40000 || document.getElementById("goldPrice").value == "") {
       document.getElementById("goldPrice").value = lastGoldBuyPrice;
     }
@@ -764,7 +758,6 @@ async function loadPrices() {
       document.getElementById("silverPrice").value = Math.trunc((cleanSilverKg / 1000) * 15.66);
     }
     
-    // อัปเดตตัวแปร Diff แสดงผลขึ้น/ลง
     const todayDiff = parseFloat(String(data.gold_diff || "").replace(/,/g, '')) || 0;
     const valToday = document.getElementById("valToday");
     const valSilver = document.getElementById("valSilver");
@@ -824,13 +817,12 @@ function isVipCustomer() {
   return customerTypeSelect && customerTypeSelect.value === "vip";
 }
 
-// สูตร "ราคาบวก" สำหรับลูกค้า VIP ฝั่งทอง อิงตามเปอร์เซ็นต์ทอง
 function getGoldVipAddon(percent) {
   if (percent === "" || percent === null || isNaN(percent)) return 0;
   if (percent < 30) return 0;
   if (percent <= 91) return 500;
   if (percent <= 99.99) return 1200;
-  return 1400; // percent >= 99.99 (มากกว่ากรณี <=99.99)
+  return 1400;
 }
 
 function updateVipUI() {
@@ -900,15 +892,10 @@ function calculateGold() {
     pricePerGram = basePrice / ORNAMENT_UNIT_DIVISOR;
     result = Math.round(pricePerGram * weight - ORNAMENT_DEDUCT);
   } else if (vip) {
-    // ===== สูตรลูกค้า VIP (ฝั่งทอง) =====
-    // ราคาบวก = ตามช่วงเปอร์เซ็นต์ทอง
     addon = getGoldVipAddon(percent);
     addonPriceGoldInput.value = addon;
-    // ราคา = TRUNC((ราคาทองบาท+ราคาบวก)*เปอร์เซ็นต์ทอง) * 0.0656
     const rawPrice = Math.trunc((basePrice + addon) * (percent / 100)) * GOLD_MULTIPLIER;
-    // TRUNC(ราคา,0)
     pricePerGram = Math.trunc(rawPrice);
-    // ราคา*น้ำหนัก แล้ว TRUNC(ราคาที่ได้,0)
     result = Math.trunc(pricePerGram * weight);
   } else {
     pricePerGram = Math.trunc((basePrice + addon) * (percent / 100) * GOLD_MULTIPLIER);
@@ -943,14 +930,9 @@ function calculateSilver() {
   let pricePerGram = 0, result = 0;
 
   if (vip) {
-    // ===== สูตรลูกค้า VIP (ฝั่งเงิน) =====
-    // ราคาต่อกรัม = TRUNC((ราคาต่อบาท * %เงิน) * 0.0656)
     pricePerGram = Math.trunc((basePrice * (percent / 100)) * GOLD_MULTIPLIER);
-    // ราคาที่ซื้อ = TRUNC(น้ำหนัก * ราคาต่อกรัม)
     const purchasePrice = Math.trunc(weight * pricePerGram);
-    // ค่ารีฟาย = น้ำหนัก × 5 บาท/กรัม (หักออกจากราคา)
     const refiningCost = Math.trunc(weight * 5);
-    // ราคาสุทธิ = ราคาที่ซื้อ - ค่ารีฟาย
     result = Math.trunc(purchasePrice - refiningCost);
   } else {
     pricePerGram = Math.trunc((basePrice - 50) * 0.99 * 0.0656);
@@ -964,9 +946,6 @@ function calculateSilver() {
 customerTypeSelect.addEventListener("change", () => { updateVipUI(); calculateGold(); calculateSilver(); });
 updateVipUI();
 
-/* =========================================================
-   ระบบจัดการบิลรวมคาร์ท
-   ========================================================= */
 let cart = JSON.parse(localStorage.getItem("gold_cart_demo_split") || "[]");
 function saveCart(){ localStorage.setItem("gold_cart_demo_split", JSON.stringify(cart)); renderCart(); }
 
@@ -1019,10 +998,16 @@ document.getElementById("addGoldToCartBtn").addEventListener("click", () => {
     weight,
     result: finalPrice,
     isEdited: finalPrice !== currentGoldCalculatedResult
-  });
-  goldTypeSelect.value = "smelted"; // คืนค่าประเภททองเป็น "ทองหลอม" (Default)
-  updateGoldFormView();             // เรียกฟังก์ชันนี้เพื่อเคลียร์น้ำหนักและคำนวณค่าเริ่มต้นใหม่
+  }); 
+
+  goldTypeSelect.value = "smelted";
+  goldQtyInput.value = 1;
+  ornamentQtyInput.value = 1;
+  ornamentCustomWeight.value = 15.16;
+  weightGoldInput.value = 1;
+  addonPriceGoldInput.value = 0;0
   
+  updateGoldFormView(); 
   saveCart();
 });
 
@@ -1036,7 +1021,6 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
 
   const pGram = weight > 0 ? (finalPrice / weight) : 0;
 
-  // ... โค้ดส่วนบนของปุ่มเงินที่มีอยู่เดิม ...
   cart.push({
     type: "silver",
     label: "เงินแท่ง",
@@ -1050,11 +1034,9 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
     result: finalPrice,
     isEdited: finalPrice !== currentSilverCalculatedResult
   }); 
-  
-  // === จุดที่ต้องเพิ่มสำหรับฝั่งเงิน ===
-  weightSilverInput.value = 1; // คืนค่าน้ำหนักเงินเริ่มต้นเป็น 1 กรัม
-  calculateSilver();           // สั่งคำนวณราคาเริ่มต้นใหม่
-  
+  weightSilverInput.value = 1;            
+  percentSilverInput.value = 99.99; 
+  calculateSilver();                      
   saveCart();
 });
 
