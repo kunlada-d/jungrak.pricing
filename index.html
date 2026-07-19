@@ -5,16 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="icon" type="image/png" sizes="16x16" href="https://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>โปรแกรมคำนวนราคารับซื้อทอง/เงิน หน้าร้าน - JONGRAK GOLD</title>
 <style>
   :root {
     --bg-main: #f4f7f6; 
     --card-ivory: #ffffff;
+    /* สีขอบปรับให้คมและมีมิติขึ้น */
     --card-border: #CFD8DC;
+    
+    /* สีทองหรูหราไล่เฉดเข้มเด่น */
     --accent-gold-start: #D4AF37;
     --accent-gold-end: #AA7C11;
+    
+    /* สีแดงมารูนเข้ม (Deep Maroon) เพิ่มน้ำหนักให้แบรนด์ร้านทอง ไม่จืด */
     --brand-maroon: #5C1D24; 
     
     --text-charcoal: #1E293B;
@@ -35,9 +39,10 @@
     color: var(--text-charcoal);
   }
   
+  /* 1. แถบราคาวิ่งด้านบนสุด (Ticker Bar) เพิ่มความเข้มคม */
   .gta-top-bar {
     width: 100%;
-    background: #110506; 
+    background: #110506; /* สีน้ำตาลเข้มเกือบดำ */
     color: #ffffff; 
     font-size: 11.5px; 
     padding: 8px 20px;
@@ -82,6 +87,7 @@
 
   .datetime-header { text-align: center; font-size: 13.5px; color: var(--brand-maroon); margin: 25px 0 5px 0; font-weight: 600; font-family: 'Inter', sans-serif; }
 
+  /* กล่องแดชบอร์ดแสดงราคาใหญ่ */
   .royal-wrapper { padding: 10px 20px; display: flex; justify-content: center; }
   .royal-dashboard { 
     background: var(--card-ivory); 
@@ -90,7 +96,7 @@
     max-width: 1200px; 
     padding: 32px 40px; 
     border-radius: 24px; 
-    box-shadow: 0 12px 35px rgba(30, 41, 59, 0.08); 
+    box-shadow: 0 12px 35px rgba(30, 41, 59, 0.08); /* เพิ่มเงาเข้มชัดให้การ์ดลอยเด่น */
     border: 1px solid var(--card-border);
   }
 
@@ -121,7 +127,7 @@
   .green-t { color: #10B981; background: rgba(16, 185, 129, 0.1); }
   .red-t { color: var(--negative-red); background: rgba(220, 38, 38, 0.1); }
 
- 
+  /* พื้นหลังกล่องราคาใช้สีเทาฟ้าอ่อนตัดตัวเลขสีมารูนและดำ */
   .main-prices { display: flex; justify-content: space-between; margin-bottom: 20px; background: #F8FAFC; padding: 16px 20px; border-radius: 12px; border: 1px solid var(--card-border); }
   .p-group { display: flex; flex-direction: column; }
   .p-lbl { font-size: 11px; color: var(--text-gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -134,6 +140,7 @@
   .royal-foot strong { font-size: 14px; color: #5C1D24 ; font-family: 'Inter', sans-serif; }
   .vat-notice { font-size: 10px; color: var(--text-gray); font-style: italic; display: block; margin-top: 4px; text-align: right; }
 
+  /* 3. เครื่องประเมินราคาหน้าร้าน */
   .luxury-panel-full {
     background: #f3f3e7;
     border-top: 1px solid var(--card-border);
@@ -151,6 +158,7 @@
   .split-container { display: flex; gap: 32px; margin-top: 15px; }
   @media (max-width: 860px) { .split-container { flex-direction: column; gap: 24px; } }
   
+  /* กล่องฝั่งคำนวณใช้สีเทานุ่มนวลเพื่อให้ตัวฟอร์มสีขาวเด้งออกมาชัดเจน */
   .split-side { 
     flex: 1; min-width: 300px; background: #F8FAFC; padding: 28px; border-radius: 20px; 
     border: 1px solid var(--card-border); box-shadow: 0 2px 8px rgba(0,0,0,0.01);
@@ -168,6 +176,7 @@
   .field input:focus, .field select:focus { outline: none; border-color: var(--accent-gold-start); box-shadow: 0 0 0 3px rgba(212,175,55,0.2); }
   .field input[readonly] { background: #E2E8F0; color: #64748B; cursor: not-allowed; border-color: var(--card-border);}
   
+  /* กล่องแดชบอร์ดราคาประเมินรวมเด่นชัดเจน */
   .result-box {
     margin-top: 20px; background: rgba(92, 29, 36, 0.04); border-radius: 14px; padding: 18px;
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;
@@ -179,11 +188,13 @@
     border: 1px solid #94A3B8; background: #FFF; padding: 4px 10px; border-radius: 6px; width: 180px;
   }
   
+  /* ปุ่มกดสไตล์หรูสีสดอิ่มน้ำ */
   button { cursor: pointer; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 600; font-size: 13.5px; transition: all 0.2s ease; }
   button:active { transform: scale(0.98); }
   .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #AA7C11 100%); color: #FFFFFF; box-shadow: 0 4px 15px rgba(170,124,17,0.3); }
   .btn-gold:hover { background: linear-gradient(135deg, #E5C048 0%, #BC8D22 100%); }
   
+  /* ฝั่งเงินเปลี่ยนเป็นปุ่มคู่สีมารูนแดงหรูสไตล์แบรนด์ร้านทองดั้งเดิม */
   .btn-silver { background: linear-gradient(135deg, #2c3e50 0%, #2c3e50 100%); color: #FFFFFF; box-shadow: 0 4px 15px rgba(92,29,36,0.25); }
   .btn-silver:hover { background: linear-gradient(135deg, #55708b 0%, #55708b 100%); }
   
@@ -214,18 +225,20 @@
   .cart-total span:last-child { color: var(--brand-maroon); font-family: 'Inter', sans-serif; font-size: 24px; }
   .empty { color: var(--text-gray); font-size: 14px; text-align: center; padding: 24px 0; font-style: italic; }
 
+  /* โมดอลแสดงตัวอย่างใบเสนอราคา */
   .modal-bg {
     position: fixed; inset: 0; background: rgba(17, 5, 6, 0.5); display: none;
     align-items: flex-start; justify-content: center; padding: 24px 16px; z-index: 150; overflow-y: auto;
   }
   .modal-bg.show { display: flex; }
 
+  /* กระดาษสีขาวบริสุทธิ์เพื่อความคมในการพิมพ์งาน */
   .quotation-paper {
     background: #ffffff !important;
     color: #222222 !important;
     border-radius: 8px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-    padding: 15mm 15mm;
+    padding: 22mm 15mm;
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
@@ -317,7 +330,6 @@
     <a href="https://kunlada-d.github.io/jongrak.notify/" target="_blank" class="gta-menu-link">รายงานประจำวัน</a>
     <a href="https://kunlada-d.github.io/Jongrak.RefiningLab/" target="_blank" class="gta-menu-link">ADMIN</a>
   </div>
-  </div>
 </div>
 
 <div class="datetime-header" id="currentDateTime">กำลังโหลดเวลา...</div>
@@ -391,7 +403,7 @@
     <h2>คำนวณราคาประเมินหน้าร้าน</h2>
     <div class="branch-box" style="max-width:700px; display:flex; gap:20px; flex-wrap:wrap;">
       <div class="field" style="flex:1; min-width:220px;">
-        <label style="font-weight:600;">เลือกสาขา / ผู้ทำรายการ *</label>
+        <label style="font-weight:600; font-family: 'IBM Plex Sans Thai';">เลือกสาขา / ผู้ทำรายการ *</label>
         <select id="branchSelect">
           <option value="สาขาธาตุพนม"selected>สาขาธาตุพนม</option>
           <option value="สาขานครพนม" >สาขานครพนม</option>
@@ -399,7 +411,7 @@
         </select>
       </div>
       <div class="field" style="flex:1; min-width:220px;">
-        <label style="font-weight:600;">ประเภทลูกค้า *</label>
+        <label style="font-weight:600; font-family: 'IBM Plex Sans Thai';">ประเภทลูกค้า *</label>
         <select id="customerType">
           <option value="normal" selected>ลูกค้าทั่วไป</option>
           <option value="vip">ลูกค้า VIP</option>
@@ -415,11 +427,11 @@
         
         <div class="calc-row">
           <div class="field">
-            <label>ราคาทองรับซื้อฐาน (บาท)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">ราคาทองรับซื้อฐาน (บาท)</label>
             <input type="number" id="goldPrice" value="40000" step="1">
           </div>
           <div class="field">
-            <label>ประเภทชิ้นงานทอง</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">ประเภทชิ้นงานทอง</label>
             <select id="goldType">
               <option value="smelted" selected>ทองหลอม</option>
               <option value="bar">ทองคำแท่ง 96.5%</option>
@@ -430,7 +442,7 @@
 
         <div class="calc-row" id="goldSizeRow" style="display:none;">
           <div class="field">
-            <label>เลือกน้ำหนักทองแท่ง</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">เลือกน้ำหนักทองแท่ง</label>
             <select id="goldSize">
               <option value="15.20">1 บาท</option>
               <option value="11.40">3 สลึง</option>
@@ -440,14 +452,14 @@
             </select>
           </div>
           <div class="field">
-            <label>จำนวนแท่ง</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">จำนวนแท่ง</label>
             <input type="number" id="goldQty" value="1" min="1">
           </div>
         </div>
 
         <div class="calc-row" id="ornamentRow" style="display:none;">
           <div class="field">
-            <label>หน่วยน้ำหนักรูปพรรณ</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">หน่วยน้ำหนักรูปพรรณ</label>
             <select id="ornamentUnit">
               <option value="baht">บาท</option>
               <option value="salung">สลึง</option>
@@ -455,7 +467,7 @@
             </select>
           </div>
           <div class="field" id="ornamentBahtField">
-            <label>เลือกจำนวนบาททอง</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">เลือกจำนวนบาททอง</label>
             <select id="ornamentBaht">
               <option value="15.16">1 บาท</option>
               <option value="30.32">2 บาท</option>
@@ -463,7 +475,7 @@
             </select>
           </div>
           <div class="field" id="ornamentSalungField" style="display:none;">
-            <label>เลือกจำนวนสลึง</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">เลือกจำนวนสลึง</label>
             <select id="ornamentSalung">
               <option value="11.37">3 สลึง</option>
               <option value="7.58">2 สลึง</option>
@@ -471,29 +483,29 @@
             </select>
           </div>
           <div class="field" id="ornamentCustomField" style="display:none;">
-            <label>ระบุน้ำหนักชั่งจริง (กรัม)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">ระบุน้ำหนักชั่งจริง (กรัม)</label>
             <input type="number" id="ornamentCustomWeight" value="15.16" step="0.01">
           </div>
           <div class="field">
-            <label>จำนวน (ชิ้น)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">จำนวน (ชิ้น)</label>
             <input type="number" id="ornamentQty" value="1" min="1">
           </div>
         </div>
 
         <div class="calc-row" id="percentGoldRow">
           <div class="field">
-            <label>เปอร์เซ็นต์ทอง (%)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">เปอร์เซ็นต์ทอง (%)</label>
             <input type="number" id="percentGold" value="90" min="0" max="100" step="0.01">
           </div>
           <div class="field">
-            <label>ราคาบวก/ลบ (บาท)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">ราคาบวก/ลบ (บาท)</label>
             <input type="number" id="addonPriceGold" value="0" step="1">
           </div>
         </div>
 
         <div class="calc-row">
           <div class="field">
-            <label>น้ำหนักทองชั่งรวม (กรัม)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';" >น้ำหนักทองชั่งรวม (กรัม)</label>
             <input type="number" id="weightGold" value="1" step="0.01">
           </div>
         </div>
@@ -513,11 +525,11 @@
         
         <div class="calc-row">
           <div class="field">
-            <label>ราคาเงินรับซื้อฐาน (บาท/1บาทเงิน)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">ราคาเงินรับซื้อฐาน (บาท/1บาทเงิน)</label>
             <input type="number" id="silverPrice" value="900" step="1">
           </div>
           <div class="field">
-            <label>ประเภทชิ้นงานเงิน</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">ประเภทชิ้นงานเงิน</label>
             <select id="silverType">
               <option value="silver99">แท่งเงิน </option>
             </select>
@@ -526,14 +538,14 @@
 
         <div class="calc-row">
           <div class="field">
-            <label>เปอร์เซ็นต์เงิน (%)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">เปอร์เซ็นต์เงิน (%)</label>
             <input type="number" id="percentSilver" value="99.99" min="0" max="100" step="0.01">
           </div>
         </div>
 
         <div class="calc-row">
           <div class="field">
-            <label>น้ำหนักเงินชั่งรวม (กรัม)</label>
+            <label style="font-family: 'IBM Plex Sans Thai';">น้ำหนักเงินชั่งรวม (กรัม)</label>
             <input type="number" id="weightSilver" value="1" step="0.01">
           </div>
         </div>
@@ -577,10 +589,21 @@
     </div>
     <div id="customerLookupStatus" style="font-size:12px; color:var(--text-gray); margin-top:6px;"></div>
 
+    <div class="calc-row" style="margin-top:16px;">
+      <div class="field" style="flex:1; min-width:220px;">
+        <label style="font-weight:600;">วิธีชำระเงิน *</label>
+        <select id="paymentMethod">
+          <option value="" selected disabled>-- เลือกวิธีชำระเงิน --</option>
+          <option value="cash">เงินสด (Cash)</option>
+          <option value="transfer">โอนเงิน (Transfer)</option>
+        </select>
+      </div>
+    </div>
+
     <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap">
       <button class="btn-outline" id="clearCartBtn">ล้างรายการบิล</button>
       <button class="btn-silver" id="saveToSheetBtn" style="margin-left:auto;">บันทึกบิลลงระบบ</button>
-      <button class="btn-gold" id="previewBtn" style="padding:12px 28px;">สร้างใบเเสร็จรับเงิน</button>
+      <button class="btn-gold" id="previewBtn" style="padding:12px 28px;">สร้างใบเสร็จรับเงิน</button>
     </div>
   </div>
 </div>
@@ -594,16 +617,16 @@
         <div><img src="https://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd" alt="Logo" style="width: 56px; height: auto;"></div>
         <div>
           <h2 style="color: #b8902a; margin: 0;" id="qShopTitle">จงรักหลอมทอง</h2>
-           <p style="margin: 4px 0 0;">ที่อยู่ เลขที่ 30 หมู่ 13 ถนนชยางกูร ตำบลธาตุพนม อำเภอธาตุพนม จังหวัดนครพนม 48110<br>
+        <p style="margin: 4px 0 0;">ที่อยู่ เลขที่ 30 หมู่ 13 ถนนชยางกูร ตำบลธาตุพนม อำเภอธาตุพนม จังหวัดนครพนม 48110<br>
              โทร: 092-823-9355 | LINE: @jongraknkp99</p>
         </div>
       </div>
       <div class="q-doctitle">
-        <div class="th">ใบเสร็จรับเงิน</div>
+       <div class="th">ใบเสร็จรับเงิน</div>
         <div class="en">RECEIPT</div>
       </div>
     </div>
-    
+
     <div class="q-info-grid">
       <div>
         <div class="q-info-title">ลูกค้า (CUSTOMER)</div>
@@ -637,8 +660,8 @@
     <div class="q-bottom">
       <div class="q-payment">
         <div class="q-info-title">วิธีชำระเงิน (Payment Method)</div>
-        <label><input type="checkbox"> เงินสด (Cash)</label>
-        <label><input type="checkbox"> โอนเงิน (Transfer)</label>
+        <label><input type="checkbox" id="qPayCash"> เงินสด (Cash)</label>
+        <label><input type="checkbox" id="qPayTransfer"> โอนเงิน (Transfer)</label>
         <label><input type="checkbox"> เช็ค (Cheque)</label>
         <div class="q-info-row" style="margin-top:8px"><span>วันที่ชำระ (Date):</span><span class="dots"></span></div>
         <div class="q-info-row"><span>จำนวนเงิน (Amount):</span><span class="dots"></span></div>
@@ -1028,7 +1051,7 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
 
 document.getElementById("clearCartBtn").addEventListener("click", () => {
   if (cart.length === 0) return;
-  if (confirm("ต้องการล้างบิลรายการทั้งหมดใช่หรือไม่?")){ cart = []; saveCart(); }
+  if (confirm("ต้องการล้างบิลรายการทั้งหมดใช่หรือไม่?")){ cart = []; saveCart(); document.getElementById("paymentMethod").value = ""; }
 });
 
 function ThaiBahtText(number){
@@ -1093,6 +1116,10 @@ document.getElementById("previewBtn").addEventListener("click", () => {
   qPhone.textContent = custPhone; qPhone.classList.toggle("dots", !custPhone);
   qAddress.textContent = custAddress; qAddress.classList.toggle("dots", !custAddress);
 
+  const payMethod = document.getElementById("paymentMethod").value;
+  document.getElementById("qPayCash").checked = (payMethod === "cash");
+  document.getElementById("qPayTransfer").checked = (payMethod === "transfer");
+
   document.getElementById("qItemsBody").innerHTML = cart.map((item, i) => `
     <tr>
       <td>${i + 1}</td><td>[${item.category==='gold'?'ทอง':'เงิน'}] ${item.label}</td><td>${formatNumber(item.basePrice)}</td>
@@ -1122,6 +1149,14 @@ document.getElementById("printPreviewBtn").addEventListener("click", () => { win
 
 async function saveTransaction(){
   if (cart.length === 0){ alert("ไม่มีรายการคำนวณในบิล"); return; }
+  const paymentMethodEl = document.getElementById("paymentMethod");
+  const paymentMethod = paymentMethodEl.value;
+  if (!paymentMethod){
+    alert("กรุณาเลือกวิธีชำระเงิน (เงินสด/โอนเงิน) ก่อนบันทึกบิล");
+    paymentMethodEl.focus();
+    return;
+  }
+  const paymentMethodLabel = paymentMethod === "cash" ? "เงินสด" : "โอนเงิน";
   const btn = document.getElementById("saveToSheetBtn");
   btn.disabled = true; btn.textContent = "กำลังบันทึกบิลลงระบบ...";
   
@@ -1129,6 +1164,8 @@ async function saveTransaction(){
     action: "saveTransaction",
     branch: document.getElementById("branchSelect").value,
     customerType: document.getElementById("customerType").value,
+    paymentMethod: paymentMethod,
+    paymentMethodLabel: paymentMethodLabel,
     customerName: document.getElementById("customerName").value.trim(),
     customerPhone: document.getElementById("customerPhone").value.trim(),
     date: new Date().toISOString(),
@@ -1140,7 +1177,7 @@ async function saveTransaction(){
   try {
     const res = await fetch(SAVE_API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
     const r = await res.json();
-    if (r && r.success) alert("บันทึกข้อมูลธุรกรรมลงระบบเรียบร้อยแล้ว");
+    if (r && r.success) { alert("บันทึกข้อมูลธุรกรรมลงระบบเรียบร้อยแล้ว"); paymentMethodEl.value = ""; }
     else alert("บันทึกไม่สำเร็จ");
   } catch (e) { alert("เกิดข้อผิดพลาดทางเทคนิค: " + e.message); }
   finally { btn.disabled = false; btn.textContent = "บันทึกบิลลงระบบ"; }
