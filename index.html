@@ -6,55 +6,128 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" img scr="https://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd" type="image/x-icon">
 <title>โปรแกรมคำนวนราคารับซื้อทอง/เงิน หน้าร้าน - JONGRAK GOLD</title>
 <style>
   :root {
     --bg-main: #f4f7f6; 
     --card-ivory: #ffffff;
+    /* สีขอบปรับให้คมและมีมิติขึ้น */
     --card-border: #CFD8DC;
+    
+    /* สีทองหรูหราไล่เฉดเข้มเด่น */
     --accent-gold-start: #D4AF37;
     --accent-gold-end: #AA7C11;
+    
+    /* สีแดงมารูนเข้ม (Deep Maroon) เพิ่มน้ำหนักให้แบรนด์ร้านทอง ไม่จืด */
     --brand-maroon: #5C1D24; 
+    
     --text-charcoal: #1E293B;
     --text-gray: #64748B;
     --positive-green: #0F766E;
     --negative-red: #DC2626;
   }
+  
   * { box-sizing: border-box; }
-  body { margin: 0; padding: 0; width: 100vw; overflow-x: hidden; font-family: "IBM Plex Sans Thai", "Inter", sans-serif; background-color: #e6e0cd; color: var(--text-charcoal); }
-  .gta-top-bar { width: 100%; background: #110506; color: #ffffff; font-size: 11.5px; padding: 8px 20px; border-bottom: 2px solid var(--accent-gold-start); display: flex; overflow: hidden; white-space: nowrap; }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    font-family: "IBM Plex Sans Thai", "Inter", sans-serif;
+    background-color: #e6e0cd;
+    color: var(--text-charcoal);
+  }
+  
+  /* 1. แถบราคาวิ่งด้านบนสุด (Ticker Bar) เพิ่มความเข้มคม */
+  .gta-top-bar {
+    width: 100%;
+    background: #110506; /* สีน้ำตาลเข้มเกือบดำ */
+    color: #ffffff; 
+    font-size: 11.5px; 
+    padding: 8px 20px;
+    border-bottom: 2px solid var(--accent-gold-start); 
+    display: flex; 
+    overflow: hidden; 
+    white-space: nowrap;
+  }
   .ticker-wrap { display: flex; gap: 40px; animation: ticker 25s linear infinite; }
   .ticker-item { display: flex; align-items: center; gap: 8px; }
   .ticker-label { font-weight: 500; color: rgba(255,255,255,0.7); }
   .ticker-val-green { color: #4ade80; font-weight: 600; font-family: 'Inter', sans-serif; }
   .ticker-val-gold { color: #fde047; font-weight: 600; font-family: 'Inter', sans-serif; }
-  @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
-  .gta-main-header { background: #FFFFFF; box-shadow: 0 4px 12px rgba(92, 29, 36, 0.05); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--card-border); }
-  @media (max-width: 768px) { .gta-main-header { flex-direction: column; gap: 15px; padding: 12px 15px; } }
+
+  @keyframes ticker {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
+
+  /* 2. แถบโลโก้หลัก */
+  .gta-main-header {
+    background: #FFFFFF; 
+    box-shadow: 0 4px 12px rgba(92, 29, 36, 0.05);
+    padding: 16px 40px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    position: sticky; 
+    top: 0; 
+    z-index: 100;
+    border-bottom: 1px solid var(--card-border);
+  }
+  @media (max-width: 768px) {
+    .gta-main-header { flex-direction: column; gap: 15px; padding: 12px 15px; }
+  }
   .gta-logo-area { display: flex; align-items: center; gap: 14px; }
   .gta-brand-text h1 { margin: 0; font-size: 20px; font-weight: 700; color: var(--brand-maroon); line-height: 1.2; letter-spacing: 0.5px;}
   .gta-brand-text p { margin: 2px 0 0; font-size: 10px; color: var(--text-gray); letter-spacing: 1px; font-family: 'Inter', sans-serif;}
   .gta-nav-menu { display: flex; gap: 24px; align-items: center; }
   .gta-menu-link { color: var(--text-charcoal); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 6px 0; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
   .gta-menu-link:hover, .gta-menu-link.active { color: var(--brand-maroon); font-weight: 600; border-bottom: 2px solid var(--accent-gold-start); }
+
   .datetime-header { text-align: center; font-size: 13.5px; color: var(--brand-maroon); margin: 25px 0 5px 0; font-weight: 600; font-family: 'Inter', sans-serif; }
+
+  /* กล่องแดชบอร์ดแสดงราคาใหญ่ */
   .royal-wrapper { padding: 10px 20px; display: flex; justify-content: center; }
-  .royal-dashboard { background: var(--card-ivory); color: var(--text-charcoal); width: 100%; max-width: 1200px; padding: 32px 40px; border-radius: 24px; box-shadow: 0 12px 35px rgba(30, 41, 59, 0.08); border: 1px solid var(--card-border); }
+  .royal-dashboard { 
+    background: var(--card-ivory); 
+    color: var(--text-charcoal); 
+    width: 100%; 
+    max-width: 1200px; 
+    padding: 32px 40px; 
+    border-radius: 24px; 
+    box-shadow: 0 12px 35px rgba(30, 41, 59, 0.08); /* เพิ่มเงาเข้มชัดให้การ์ดลอยเด่น */
+    border: 1px solid var(--card-border);
+  }
+
   .royal-header { border-bottom: 2px solid var(--card-border); padding-bottom: 18px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end;}
   .live-row { display: flex; align-items: center; gap: 12px; }
   .royal-header h1 { font-size: 24px; font-weight: 700; margin: 0; color: var(--brand-maroon); letter-spacing: -0.5px; }
-  .dot-live { width: 8px; height: 8px; background: var(--positive-green); border-radius: 50%; box-shadow: 0 0 0 0 #4ade80; animation: pulse 1.8s infinite; }
-  @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(15, 118, 110, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(15, 118, 110, 0); } }
+  
+  .dot-live { 
+    width: 8px; height: 8px; background: var(--positive-green); border-radius: 50%; 
+    box-shadow: 0 0 0 0 #4ade80; animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(15, 118, 110, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(15, 118, 110, 0); }
+  }
   .subtitle { font-size: 12px; color: var(--text-gray); margin: 0; font-family: 'Inter', sans-serif; text-align: right;}
+
   .royal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-  .royal-card { background: #FFFFFF; border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .royal-card { 
+    background: #FFFFFF; border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
   .royal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(92,29,36,0.1); border-color: var(--accent-gold-start); }
   .royal-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   .asset-tag { font-size: 13px; font-weight: 700; letter-spacing: 0.5px; color: #AA7C11; font-family: 'Inter', sans-serif; }
   .change-tag { font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; padding: 4px 8px; border-radius: 6px;}
   .green-t { color: #10B981; background: rgba(16, 185, 129, 0.1); }
   .red-t { color: var(--negative-red); background: rgba(220, 38, 38, 0.1); }
+
+  /* พื้นหลังกล่องราคาใช้สีเทาฟ้าอ่อนตัดตัวเลขสีมารูนและดำ */
   .main-prices { display: flex; justify-content: space-between; margin-bottom: 20px; background: #F8FAFC; padding: 16px 20px; border-radius: 12px; border: 1px solid var(--card-border); }
   .p-group { display: flex; flex-direction: column; }
   .p-lbl { font-size: 11px; color: var(--text-gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -62,82 +135,172 @@
   .text-right { text-align: right; }
   .gold-highlight { color: #AA7C11; }
   .silver-highlight { color: #2c3e50 }
+
   .royal-foot { border-top: 1px dashed var(--card-border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: var(--text-gray); }
   .royal-foot strong { font-size: 14px; color: #5C1D24 ; font-family: 'Inter', sans-serif; }
   .vat-notice { font-size: 10px; color: var(--text-gray); font-style: italic; display: block; margin-top: 4px; text-align: right; }
-  .luxury-panel-full { background: #f3f3e7; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); margin: 20px 0 !important; padding: 35px 40px !important; color: var(--text-charcoal); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+
+  /* 3. เครื่องประเมินราคาหน้าร้าน */
+  .luxury-panel-full {
+    background: #f3f3e7;
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+    margin: 20px 0 !important; 
+    padding: 35px 40px !important;
+    color: var(--text-charcoal);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
   .panel-container { max-width: 90%; margin: 0 auto;   }
   .luxury-panel-full h2 { margin: 0 0 24px; font-size: 28px; color: #5C1D24; font-weight: 800; border-left: 4px solid var(--accent-gold-start); padding-left: 12px; text-align: center; }
+
   .branch-box { background: #F8FAFC; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 24px; max-width: 500px; }
+
   .split-container { display: flex; gap: 32px; margin-top: 15px; }
   @media (max-width: 860px) { .split-container { flex-direction: column; gap: 24px; } }
-  .split-side { flex: 1; min-width: 300px; background: #F8FAFC; padding: 28px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
+  
+  /* กล่องฝั่งคำนวณใช้สีเทานุ่มนวลเพื่อให้ตัวฟอร์มสีขาวเด้งออกมาชัดเจน */
+  .split-side { 
+    flex: 1; min-width: 300px; background: #F8FAFC; padding: 28px; border-radius: 20px; 
+    border: 1px solid var(--card-border); box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  }
   .split-side h3 { margin: 0 0 20px 0; font-size: 16px; font-weight: 600; padding-bottom: 10px; border-bottom: 1px solid var(--card-border); color: var(--brand-maroon); }
+
   .calc-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
   .field { flex: 1; min-width: 140px; display: flex; flex-direction: column; gap: 8px; }
   .field label { font-size: 12.5px; color: var(--text-charcoal); font-weight: 600; }
-  .field input, .field select { padding: 10px 14px; border-radius: 8px; border: 1px solid #CBD5E1; background: #FFFFFF; color: var(--text-charcoal); font-size: 14px; width: 100%; font-weight: 500; transition: all 0.2s ease; }
+  .field input, .field select {
+    padding: 10px 14px; border-radius: 8px; border: 1px solid #CBD5E1;
+    background: #FFFFFF; color: var(--text-charcoal); font-size: 14px; width: 100%; font-weight: 500;
+    transition: all 0.2s ease;
+  }
   .field input:focus, .field select:focus { outline: none; border-color: var(--accent-gold-start); box-shadow: 0 0 0 3px rgba(212,175,55,0.2); }
   .field input[readonly] { background: #E2E8F0; color: #64748B; cursor: not-allowed; border-color: var(--card-border);}
-  .result-box { margin-top: 20px; background: rgba(92, 29, 36, 0.04); border-radius: 14px; padding: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; border: 1px dashed var(--brand-maroon); }
+  
+  /* กล่องแดชบอร์ดราคาประเมินรวมเด่นชัดเจน */
+  .result-box {
+    margin-top: 20px; background: rgba(92, 29, 36, 0.04); border-radius: 14px; padding: 18px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;
+    border: 1px dashed var(--brand-maroon);
+  }
   .result-box .amount-input-wrap { display: flex; flex-direction: column; }
-  .result-box .editable-amount { font-size: 24px; font-weight: 700; color: var(--brand-maroon); font-family: 'Inter', sans-serif; border: 1px solid #94A3B8; background: #FFF; padding: 4px 10px; border-radius: 6px; width: 180px; }
+  .result-box .editable-amount { 
+    font-size: 24px; font-weight: 700; color: var(--brand-maroon); font-family: 'Inter', sans-serif; 
+    border: 1px solid #94A3B8; background: #FFF; padding: 4px 10px; border-radius: 6px; width: 180px;
+  }
+  
+  /* ปุ่มกดสไตล์หรูสีสดอิ่มน้ำ */
   button { cursor: pointer; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 600; font-size: 13.5px; transition: all 0.2s ease; }
   button:active { transform: scale(0.98); }
   .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #AA7C11 100%); color: #FFFFFF; box-shadow: 0 4px 15px rgba(170,124,17,0.3); }
   .btn-gold:hover { background: linear-gradient(135deg, #E5C048 0%, #BC8D22 100%); }
+  
+  /* ฝั่งเงินเปลี่ยนเป็นปุ่มคู่สีมารูนแดงหรูสไตล์แบรนด์ร้านทองดั้งเดิม */
   .btn-silver { background: linear-gradient(135deg, #2c3e50 0%, #2c3e50 100%); color: #FFFFFF; box-shadow: 0 4px 15px rgba(92,29,36,0.25); }
   .btn-silver:hover { background: linear-gradient(135deg, #55708b 0%, #55708b 100%); }
+  
   .btn-outline { background: #FFFFFF; color: var(--text-charcoal); border: 1px solid #CBD5E1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
   .btn-outline:hover { background: #F8FAFC; border-color: var(--accent-gold-start); }
   .btn-danger { background: rgba(220, 38, 38, 0.1); color: var(--negative-red); border: 1px solid rgba(220, 38, 38, 0.2); padding: 6px 12px; font-size: 12px;}
   .btn-danger:hover { background: rgba(220, 38, 38, 0.2); }
+
+  /* 4. กล่องรายการบิล */
   .bottom-bill-container { max-width: 1200px; margin: 0 auto 50px; padding: 0 20px; }
-  .bill-panel { background: #FFFFFF; border-radius: 24px; padding: 32px 40px; border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.03); }
+  .bill-panel {
+    background: #FFFFFF; border-radius: 24px; padding: 32px 40px;
+    border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+  }
   .bill-panel h2 { margin: 0 0 20px; font-size: 18px; color: var(--brand-maroon); font-weight: 600; }
+  
   .cart-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-  .cart-item { display: flex; justify-content: space-between; align-items: center; gap: 16px; background: #F8FAFC; border-radius: 12px; padding: 14px 20px; font-size: 14px; border-left: 5px solid var(--accent-gold-start); border-top: 1px solid var(--card-border); border-right: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+  .cart-item {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    background: #F8FAFC; border-radius: 12px; padding: 14px 20px; font-size: 14px;
+    border-left: 5px solid var(--accent-gold-start); border-top: 1px solid var(--card-border); border-right: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border);
+  }
   .cart-item.silver-item { border-left-color: var(--brand-maroon); }
   .cart-item .meta { color: var(--text-gray); font-size: 12px; margin-top: 2px; }
   .cart-item strong { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--brand-maroon); }
+  
   .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; padding-top: 16px; border-top: 2px dashed var(--card-border); color: var(--text-charcoal); }
   .cart-total span:last-child { color: var(--brand-maroon); font-family: 'Inter', sans-serif; font-size: 24px; }
   .empty { color: var(--text-gray); font-size: 14px; text-align: center; padding: 24px 0; font-style: italic; }
-  .modal-bg { position: fixed; inset: 0; background: rgba(17, 5, 6, 0.5); display: none; align-items: flex-start; justify-content: center; padding: 24px 16px; z-index: 150; overflow-y: auto; }
+
+  /* โมดอลแสดงตัวอย่างใบเสนอราคา */
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(17, 5, 6, 0.5); display: none;
+    align-items: flex-start; justify-content: center; padding: 24px 16px; z-index: 150; overflow-y: auto;
+  }
   .modal-bg.show { display: flex; }
-  .quotation-paper { background: #ffffff !important; color: #222222 !important; border-radius: 8px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); padding: 22mm 15mm; width: 210mm; min-height: 297mm; box-sizing: border-box; display: flex; flex-direction: column; }
-  @media (max-width:860px){ .quotation-paper{width:100%;min-height:0;padding:16px;} }
-  .q-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px; border-bottom:2px solid #c9a13b;padding-bottom:12px;margin-bottom:14px;}
+
+  /* กระดาษสีขาวบริสุทธิ์เพื่อความคมในการพิมพ์งาน */
+  .quotation-paper {
+    background: #ffffff !important;
+    color: #222222 !important;
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    padding: 22mm 15mm;
+    width: 210mm;
+    min-height: 297mm;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (max-width:860px){
+    .quotation-paper{width:100%;min-height:0;padding:16px;}
+  }
+  .q-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+    border-bottom:2px solid #c9a13b;padding-bottom:12px;margin-bottom:14px;}
   .q-shop{display:flex;gap:12px;align-items:center;}
-  .q-logo{width:56px;height:56px;border-radius:50%;flex-shrink:0; background:linear-gradient(145deg,#d4b652,#7a5a10); display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff9e6; box-shadow:0 2px 6px rgba(0,0,0,.25);}
+  .q-logo{width:56px;height:56px;border-radius:50%;flex-shrink:0;
+    background:linear-gradient(145deg,#d4b652,#7a5a10);
+    display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff9e6;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);}
   .q-shop h1{margin:0;font-size:17px;color:#5c3d0a;}
   .q-shop p{margin:4px 0 0;font-size:11.5px;color:#7a6a45;}
   .q-doctitle{text-align:right;white-space:nowrap;}
   .q-doctitle .th{font-size:19px;font-weight:800;color:#6a0b12;}
   .q-doctitle .en{font-size:11px;letter-spacing:2px;color:#8a7a55;}
+
   .q-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;}
-  .q-info-title{font-size:12px;font-weight:700;color:#8a6a1a;border-bottom:1px solid #e6d8ad; padding-bottom:4px;margin-bottom:6px;}
+  .q-info-title{font-size:12px;font-weight:700;color:#8a6a1a;border-bottom:1px solid #e6d8ad;
+    padding-bottom:4px;margin-bottom:6px;}
   .q-info-row{display:flex;gap:6px;font-size:12.5px;margin:4px 0;}
   .q-info-row .dots{flex:1;border-bottom:1px dotted #b8a878;min-width:40px;}
+
   table.q-items, table.q-summary{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;}
-  table.q-items th, table.q-items td, table.q-summary th, table.q-summary td{ border:1px solid #e6d8ad;padding:6px 6px;text-align:right;}
-  table.q-items th:nth-child(1), table.q-items td:nth-child(1), table.q-items th:nth-child(2), table.q-items td:nth-child(2){text-align:left;}
+  table.q-items th, table.q-items td, table.q-summary th, table.q-summary td{
+    border:1px solid #e6d8ad;padding:6px 6px;text-align:right;}
+  table.q-items th:nth-child(1), table.q-items td:nth-child(1),
+  table.q-items th:nth-child(2), table.q-items td:nth-child(2){text-align:left;}
   table.q-items thead th, table.q-summary thead th{background:#f5ecc9;color:#5c3d0a;font-weight:700;}
   table.q-summary td:first-child{text-align:left;}
+
   .q-summary-title{font-size:12.5px;font-weight:700;color:#8a6a1a;margin-bottom:6px;}
+
   .q-bottom{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
   .q-payment{flex:1;min-width:220px;background:#f8f3e2;border-radius:8px;padding:10px 12px;}
   .q-payment label{display:flex;align-items:center;gap:6px;font-size:12.5px;margin:4px 0;}
   .q-totals{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px;}
   .q-total-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;}
-  .q-total-row.grand{font-size:16px;font-weight:800;color:#6a0b12;background:#f5ecc9; padding:8px 10px;border-radius:8px;margin-top:4px;}
+  .q-total-row.grand{font-size:16px;font-weight:800;color:#6a0b12;background:#f5ecc9;
+    padding:8px 10px;border-radius:8px;margin-top:4px;}
   .q-baht-text{text-align:right;font-size:11px;color:#7a6a45;font-style:italic;margin-top:2px;}
+
   .q-terms{border-top:1px dashed #b8902a55;padding-top:10px;font-size:11.5px;color:#7a6a45;}
   .q-terms p{margin:4px 0 0;}
+
   .modal h2{margin:0 0 4px;color:#5c3d0a}
   .modal .shop{font-size:12.5px;color:#7a6a45;margin-bottom:14px}
   .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
-  @media print { @page{size:A4;margin:0;} body *{visibility:hidden;} #quotationPaper, #quotationPaper *{visibility:visible;} #quotationPaper{position:absolute;left:0;top:0;width:210mm;min-height:297mm;margin:0;box-shadow:none;padding:15mm;} .modal-bg{position:static !important;background:none !important;padding:0 !important;display:block !important;} .no-print{display:none !important;} }
+
+  @media print {
+    @page{size:A4;margin:0;}
+    body *{visibility:hidden;}
+    #quotationPaper, #quotationPaper *{visibility:visible;}
+    #quotationPaper{position:absolute;left:0;top:0;width:210mm;min-height:297mm;margin:0;box-shadow:none;padding:15mm;}
+    .modal-bg{position:static !important;background:none !important;padding:0 !important;display:block !important;}
+    .no-print{display:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -187,6 +350,7 @@
           <span class="asset-tag">ราคาทองตามสมาคมฯ 96.5%</span>
           <span class="change-tag" id="goldChangeContainer"><span id="valToday">กำลังโหลด...</span></span>
         </div>
+        
         <div class="main-prices">
           <div class="p-group">
             <span class="p-lbl">รับซื้อ Buy Price </span>
@@ -197,6 +361,7 @@
             <div class="p-val " id="barSell">กำลังโหลด...</div>
           </div>
         </div>
+
         <div class="royal-foot">
           <span>Price per gram</span>
           <strong id="goldPerGram">- บาท : กรัม</strong>
@@ -208,6 +373,7 @@
           <span class="asset-tag">ราคาเงินแท่งเงิน 1 กิโลกรัม 99.99%</span>
           <span class="change-tag" id="silverChangeContainer"><span id="valSilver">กำลังโหลด...</span></span>
         </div>
+        
         <div class="main-prices">
           <div class="p-group">
             <span class="p-lbl">รับซื้อ Buy Price </span>
@@ -218,6 +384,7 @@
             <div class="p-val " id="ornSell">กำลังโหลด...</div>
           </div>
         </div>
+
         <div class="royal-foot">
           <span>Price per gram</span>
           <div>
@@ -238,9 +405,9 @@
       <div class="field" style="flex:1; min-width:220px;">
         <label style="font-weight:600; font-family: 'IBM Plex Sans Thai';">เลือกสาขา / ผู้ทำรายการ *</label>
         <select id="branchSelect">
-          <option value="ธาตุพนม"selected>สาขาธาตุพนม</option>
-          <option value="นครพนม" >สาขานครพนม</option>
-          <option value="ท่าแขก">สาขาท่าแขก</option>
+          <option value="สาขาธาตุพนม"selected>สาขาธาตุพนม</option>
+          <option value="สาขานครพนม" >สาขานครพนม</option>
+          <option value="สาขาท่าแขก">สาขาท่าแขก</option>
         </select>
       </div>
       <div class="field" style="flex:1; min-width:220px;">
@@ -253,9 +420,11 @@
     </div>
 
     <div class="split-container">
+      
       <div class="split-side gold-side">
         <p class="text-center" style="font-size: 30px; font-weight: 700; letter-spacing: 0.5px; color: #AA7C11; text-align: center;">คำนวณราคาทอง</p>
         <h3> ประเมินรับซื้อทองคำ <span id="goldVipBadge" style="display:none; font-size:11px; background:#AA7C11; color:#fff; padding:2px 8px; border-radius:10px; vertical-align:middle;">โหมด VIP</span></h3>
+        
         <div class="calc-row">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">ราคาทองรับซื้อฐาน (บาท)</label>
@@ -270,6 +439,7 @@
             </select>
           </div>
         </div>
+
         <div class="calc-row" id="goldSizeRow" style="display:none;">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">เลือกน้ำหนักทองแท่ง</label>
@@ -283,9 +453,10 @@
           </div>
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">จำนวนแท่ง</label>
-            <input type="number" id="goldQty" value="" min="1">
+            <input type="number" id="goldQty" value="1" min="1">
           </div>
         </div>
+
         <div class="calc-row" id="ornamentRow" style="display:none;">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">หน่วยน้ำหนักรูปพรรณ</label>
@@ -313,13 +484,14 @@
           </div>
           <div class="field" id="ornamentCustomField" style="display:none;">
             <label style="font-family: 'IBM Plex Sans Thai';">ระบุน้ำหนักชั่งจริง (กรัม)</label>
-            <input type="number" id="ornamentCustomWeight" value="" step="0.01">
+            <input type="number" id="ornamentCustomWeight" value="15.16" step="0.01" placeholder="0.00">
           </div>
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">จำนวน (ชิ้น)</label>
             <input type="number" id="ornamentQty" value="1" min="1">
           </div>
         </div>
+
         <div class="calc-row" id="percentGoldRow">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">เปอร์เซ็นต์ทอง (%)</label>
@@ -330,12 +502,14 @@
             <input type="number" id="addonPriceGold" value="" step="1" placeholder="0">
           </div>
         </div>
+
         <div class="calc-row">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';" >น้ำหนักทองชั่งรวม (กรัม)</label>
             <input type="number" id="weightGold" value="" step="0.01" placeholder="0.00">
           </div>
         </div>
+
         <div class="result-box">
           <div class="amount-input-wrap">
             <label style="font-size:11px; color:var(--text-gray)">ประเมินราคาทองรวม (แก้ไขตัวเลขได้)</label>
@@ -348,6 +522,7 @@
       <div class="split-side silver-side">
          <p style="font-size: 30px; font-weight: 700; color: #2c3e50; text-align: center;">คำนวณราคาเงิน</p>
          <h3> ประเมินรับซื้อแท่งเงิน <span id="silverVipBadge" style="display:none; font-size:11px; background:#5C1D24; color:#fff; padding:2px 8px; border-radius:10px; vertical-align:middle;">โหมด VIP</span></h3>
+        
         <div class="calc-row">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">ราคาเงินรับซื้อฐาน (บาท/1บาทเงิน)</label>
@@ -360,18 +535,21 @@
             </select>
           </div>
         </div>
+
         <div class="calc-row">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">เปอร์เซ็นต์เงิน (%)</label>
             <input type="number" id="percentSilver" value="" min="0" max="100" step="0.01" placeholder="0.00">
           </div>
         </div>
+
         <div class="calc-row">
           <div class="field">
             <label style="font-family: 'IBM Plex Sans Thai';">น้ำหนักเงินชั่งรวม (กรัม)</label>
             <input type="number" id="weightSilver" value="" step="0.01" placeholder="0.00">
           </div>
         </div>
+
         <div class="result-box">
           <div class="amount-input-wrap">
             <label style="font-size:11px; color:var(--text-gray)">ประเมินราคาเงินรวม (แก้ไขตัวเลขได้)</label>
@@ -380,6 +558,7 @@
           <button class="btn-silver" id="addSilverToCartBtn">+ ลงบิลเงิน</button>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -388,10 +567,12 @@
   <div class="bill-panel">
     <h2>รายการรับซื้อในบิลนี้</h2>
     <div class="cart-items" id="cartItems"></div>
+    
     <div class="cart-total">
       <span>ยอดรวมสุทธิจ่ายออก</span>
       <span id="cartTotal">0.00 บาท</span>
     </div>
+
     <div class="calc-row" style="margin-top:24px; border-top:1px dashed var(--card-border); padding-top:20px;">
       <div class="field" style="flex:2; min-width:200px;">
         <label>ชื่อลูกค้า (ถ้ามี)</label>
@@ -407,6 +588,7 @@
       </div>
     </div>
     <div id="customerLookupStatus" style="font-size:12px; color:var(--text-gray); margin-top:6px;"></div>
+
     <div class="calc-row" style="margin-top:16px;">
       <div class="field" style="flex:1; min-width:220px;">
         <label style="font-weight:600;">วิธีชำระเงิน *</label>
@@ -417,6 +599,7 @@
         </select>
       </div>
     </div>
+
     <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap">
       <button class="btn-outline" id="clearCartBtn">ล้างรายการบิล</button>
       <button class="btn-silver" id="saveToSheetBtn" style="margin-left:auto;">บันทึกบิลลงระบบ</button>
@@ -425,8 +608,10 @@
   </div>
 </div>
 
+<!-- โมดอลใบเสนอราคา (คืนค่ารูปแบบเดิมของคุณ 100%) -->
 <div class="modal-bg" id="previewModal">
   <div class="modal quotation-paper" id="quotationPaper">
+
     <div class="q-header">
       <div class="q-shop">
         <div><img src="https://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd" alt="Logo" style="width: 56px; height: auto;"></div>
@@ -441,6 +626,7 @@
         <div class="en">RECEIPT</div>
       </div>
     </div>
+
     <div class="q-info-grid">
       <div>
         <div class="q-info-title">ลูกค้า (CUSTOMER)</div>
@@ -454,6 +640,7 @@
         <div class="q-info-row"><span>วันที่ออก:</span><span id="qDate"></span></div>
       </div>
     </div>
+
     <table class="q-items">
       <thead>
         <tr>
@@ -463,11 +650,13 @@
       </thead>
       <tbody id="qItemsBody"></tbody>
     </table>
+
     <div class="q-summary-title">สรุปยอดแยกตามประเภททอง (STOCK SUMMARY)</div>
     <table class="q-summary">
       <thead><tr><th>รายการ </th><th>น้ำหนัก (กรัม)</th><th>ราคา (บาท)</th></tr></thead>
       <tbody id="qSummaryBody"></tbody>
     </table>
+
     <div class="q-bottom">
       <div class="q-payment">
         <div class="q-info-title">วิธีชำระเงิน (Payment Method)</div>
@@ -484,10 +673,12 @@
         <div class="q-baht-text" id="qBahtText"></div>
       </div>
     </div>
+
     <div class="q-terms">
       <div class="q-info-title">เงื่อนไขและข้อกำหนด (Terms and Conditions)</div>
       <p>ราคาที่เสนอเป็นราคาประเมิน ณ วันที่ออกเอกสาร อาจมีการเปลี่ยนแปลงตามราคาตลาดจริง ณ เวลาที่ทำรายการซื้อขายจริง</p>
     </div>
+
     <div class="modal-actions no-print">
       <button class="btn-danger" id="closePreviewBtn">ปิด</button>
       <button class="btn-gold" id="printPreviewBtn">พิมพ์ / บันทึก PDF</button>
@@ -496,7 +687,7 @@
 </div>
 
 <script>
-const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec?action=api";
+const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";
 const REFRESH_MS = 20000;
 const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";    
 const CUSTOMER_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec"; 
@@ -521,31 +712,27 @@ async function fetchJson(url) {
   return res.json();
 }
 
-function formatDiff(diff){
-  if (diff > 0) return "▲ +" + diff.toLocaleString("th-TH");
-  if (diff < 0) return "▼ " + diff.toLocaleString("th-TH");
-  return "0";
-}
-
 async function loadPrices() {
   try {
     const data = await fetchJson(PROXY_URL);
+    
+    // แปลงค่าความสะอาดของตัวเลข
     const cleanGoldBid = parseFloat(String(data.gold_bid).replace(/,/g, '')) || 0;
     const cleanGoldAsk = parseFloat(String(data.gold_ask).replace(/,/g, '')) || 0;
     const cleanSilverKg = parseFloat(String(data.silver_bid_kg).replace(/,/g, '')) || 0;
     const cleanSilverAskKg = parseFloat(String(data.silver_ask_kg).replace(/,/g, '')) || 0;
     const cleanSilverPerGram = parseFloat(data.silver_per_gram) || 0;
-
+    
     priceEl.barBuy.textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     priceEl.barSell.textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
-    priceEl.ornBuy.textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿";
-    priceEl.ornSell.textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿";
+    priceEl.ornBuy.textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿"; // โชว์ราคาเงินแท่งรับซื้อ
+    priceEl.ornSell.textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿"; // โชว์ราคาเงินแท่งขายออก
 
     document.getElementById("tickerGoldBuy").textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerGoldSell").textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverBuy").textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverSell").textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿";
-
+    
     document.getElementById("tickerGoldBuy2").textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerGoldSell2").textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverBuy2").textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿";
@@ -570,20 +757,20 @@ async function loadPrices() {
     if(cleanSilverKg > 0 && (document.getElementById("silverPrice").value == 900 || document.getElementById("silverPrice").value == "")) {
       document.getElementById("silverPrice").value = Math.trunc((cleanSilverKg / 1000) * 15.66);
     }
-
-    const todayDiff = parseFloat(String(data.gold_diff || "0").replace(/,/g, '')) || 0;
+    
+    const todayDiff = parseFloat(String(data.gold_diff || "").replace(/,/g, '')) || 0;
     const valToday = document.getElementById("valToday");
     const valSilver = document.getElementById("valSilver");
     const gContainer = document.getElementById("goldChangeContainer");
     const sContainer = document.getElementById("silverChangeContainer");
-
+    
     if(valToday && gContainer) {
-      valToday.innerHTML = formatDiff(todayDiff);
+      valToday.innerHTML = (todayDiff > 0 ? "▲ +" : todayDiff < 0 ? "▼ " : "— ") + todayDiff.toLocaleString("th-TH");
       gContainer.className = todayDiff > 0 ? "change-tag green-t" : todayDiff < 0 ? "change-tag red-t" : "change-tag";
     }
     if(valSilver && sContainer) {
-      const silverDiff = parseFloat(String(data.silver_diff || "0").replace(/,/g, '')) || 0;
-      valSilver.innerHTML = formatDiff(silverDiff);
+      const silverDiff = parseFloat(data.silver_diff) || 0;
+      valSilver.innerHTML = (silverDiff > 0 ? "▲ +" : silverDiff < 0 ? "▼ " : "— ") + silverDiff.toLocaleString("th-TH");
       sContainer.className = silverDiff > 0 ? "change-tag green-t" : silverDiff < 0 ? "change-tag red-t" : "change-tag";
     }
 
@@ -597,6 +784,9 @@ async function loadPrices() {
   }
 }
 
+/* =========================================================
+   ระบบคำนวณฝั่งทอง
+   ========================================================= */
 const goldPriceInput = document.getElementById("goldPrice");
 const goldTypeSelect = document.getElementById("goldType");
 const goldSizeRow = document.getElementById("goldSizeRow");
@@ -639,6 +829,7 @@ function updateVipUI() {
   const vip = isVipCustomer();
   goldVipBadge.style.display = vip ? "inline-block" : "none";
   silverVipBadge.style.display = vip ? "inline-block" : "none";
+  // ฝั่งทอง: เมื่อเป็น VIP ราคาบวกคำนวณอัตโนมัติ ไม่ให้แก้ไขเอง
   if (vip && goldTypeSelect.value !== "ornament") {
     addonPriceGoldInput.setAttribute("readonly", "true");
   } else {
@@ -722,6 +913,9 @@ ornamentUnitSelect.addEventListener("change", updateGoldFormView);
 [ornamentBahtSelect, ornamentSalungSelect, ornamentCustomWeight, ornamentQtyInput].forEach(el => el.addEventListener("change", () => { calculateGoldWeightCombined(); calculateGold(); }));
 [goldPriceInput, percentGoldInput, addonPriceGoldInput, weightGoldInput].forEach(el => el.addEventListener("input", calculateGold));
 
+/* =========================================================
+   ระบบคำนวณฝั่งเงิน
+   ========================================================= */
 const silverPriceInput = document.getElementById("silverPrice");
 const percentSilverInput = document.getElementById("percentSilver");
 const weightSilverInput = document.getElementById("weightSilver");
@@ -753,8 +947,6 @@ customerTypeSelect.addEventListener("change", () => { updateVipUI(); calculateGo
 updateVipUI();
 
 let cart = JSON.parse(localStorage.getItem("gold_cart_demo_split") || "[]");
-let editingIndex = -1;   // index ของรายการที่กำลังแก้ไขชื่ออยู่ (-1 = ไม่มี)
-
 function saveCart(){ localStorage.setItem("gold_cart_demo_split", JSON.stringify(cart)); renderCart(); }
 
 function formatNumber(n){ return n.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
@@ -767,21 +959,13 @@ function renderCart(){
     wrap.innerHTML = cart.map((item, i) => `
       <div class="cart-item ${item.category==='silver'?'silver-item':''}">
         <div>
-          <span style="color:${item.category==='gold'?'var(--accent-gold-start)':'#4B5563'}">[${item.category==='gold'?'ทอง':'เงิน'}]</span>
-          ${i === editingIndex
-            ? `<input id="editLabelInput_${i}" type="text" value="${item.label.replace(/"/g,'&quot;')}"
-                 style="font-size:14px;font-weight:600;padding:4px 8px;border:1px solid var(--card-border);border-radius:6px;font-family:inherit;color:var(--brand-maroon)"
-                 onkeydown="if(event.key==='Enter')saveEditLabel(${i});if(event.key==='Escape')cancelEditLabel();">`
-            : `<strong>${item.label}</strong>`}
+          <span style="color:${item.category==='gold'?'var(--accent-gold-start)':'#4B5563'}">[${item.category==='gold'?'ทอง':'เงิน'}]</span> <strong>${item.label}</strong>
           <div class="meta">น้ำหนัก ${item.weight} ก. • เปอร์เซ็นต์ ${item.percent}% ${item.isEdited ? '(แก้ไขมือ)' : ''}</div>
         </div>
         <div style="display:flex;align-items:center;gap:16px">
           <strong>${formatNumber(item.result)} บาท</strong>
           <div style="display:flex;gap:6px">
-            ${i === editingIndex
-              ? `<button class="btn-outline" style="padding:6px 12px;font-size:12px" onclick="saveEditLabel(${i})">บันทึก</button>
-                 <button class="btn-outline" style="padding:6px 12px;font-size:12px" onclick="cancelEditLabel()">ยกเลิก</button>`
-              : `<button class="btn-outline" style="padding:6px 12px;font-size:12px" onclick="startEditLabel(${i})">แก้ไข</button>`}
+            <button class="btn-outline" style="padding:6px 12px;font-size:12px" onclick="editItemLabel(${i})">แก้ไข</button>
             <button class="btn-danger" onclick="removeItem(${i})">ลบออก</button>
           </div>
         </div>
@@ -793,25 +977,14 @@ function renderCart(){
 
 function removeItem(i){ cart.splice(i, 1); saveCart(); }
 
-function startEditLabel(i){
-  editingIndex = i;
-  renderCart();
-  const el = document.getElementById("editLabelInput_" + i);
-  if (el){ el.focus(); el.select(); }
-}
-
-function cancelEditLabel(){
-  editingIndex = -1;
-  renderCart();
-}
-
-function saveEditLabel(i){
-  const el = document.getElementById("editLabelInput_" + i);
-  if (!el) return;
-  const trimmed = el.value.trim();
-  if (!trimmed){ alert("ชื่อรายการห้ามเว้นว่าง"); el.focus(); return; }
-  cart[i].label = trimmed;
-  editingIndex = -1;
+function editItemLabel(i){
+  const item = cart[i];
+  if (!item) return;
+  const newLabel = prompt("แก้ไขชื่อรายการ:", item.label);
+  if (newLabel === null) return;          // กดยกเลิก ไม่แก้ไข
+  const trimmed = newLabel.trim();
+  if (!trimmed){ alert("ชื่อรายการห้ามเว้นว่าง"); return; }
+  item.label = trimmed;
   saveCart();
 }
 
@@ -821,16 +994,16 @@ document.getElementById("addGoldToCartBtn").addEventListener("click", () => {
   const addon = parseFloat(addonPriceGoldInput.value) || 0;
   const weight = parseFloat(weightGoldInput.value) || 0;
   const finalPrice = parseFloat(resultGoldAmount.value) || 0; 
-
+  
   if (finalPrice <= 0 || weight <= 0){ alert("น้ำหนักทองหรือผลลัพธ์ไม่ถูกต้อง"); return; }
-
+  
   const label = goldTypeSelect.options[goldTypeSelect.selectedIndex].textContent;
   const pGram = weight > 0 ? (finalPrice / weight) : 0;
 
   cart.push({
     type: goldTypeSelect.value,
     label: label,
-    category: "ทอง",
+    category: "gold",
     customerType: document.getElementById("customerType").value,
     basePrice,
     percent,
@@ -841,19 +1014,14 @@ document.getElementById("addGoldToCartBtn").addEventListener("click", () => {
     isEdited: finalPrice !== currentGoldCalculatedResult
   }); 
 
-  // ====== โค้ดล้างค่าฝั่งทองให้กลับเป็นค่าว่าง ======
-  goldTypeSelect.value = "smelted";      // 1. ปรับประเภทกลับเป็นทองหลอม
-  goldQtyInput.value = "";                 // 2. รีเซ็ตจำนวนแท่ง
-  ornamentQtyInput.value = 1;             // 3. รีเซ็ตจำนวนชิ้นรูปพรรณ
-  ornamentCustomWeight.value ="";     // 4. รีเซ็ตน้ำหนักชั่งจริงรูปพรรณ
-  addonPriceGoldInput.value = "";          // 5. รีเซ็ตราคาบวก/ลบ เป็น 0
-
-  updateGoldFormView();                   // 6. อัปเดตหน้าตาฟอร์มตาม type (จะเซ็ต percent เริ่มต้นทับกลับมาก่อน)
-  weightGoldInput.value = "";             // 7. เคลียร์น้ำหนัก "หลัง" updateGoldFormView ให้ว่างจริง
-  percentGoldInput.value = "";            // 8. เคลียร์เปอร์เซ็นต์ "หลัง" updateGoldFormView ให้ว่างจริง
-  calculateGold();                        // 9. คำนวณใหม่ (ได้ผลลัพธ์ 0 เพราะน้ำหนัก/เปอร์เซ็นต์ว่าง)
-  // ===============================================
-
+  goldTypeSelect.value = "smelted";
+  goldQtyInput.value = "";
+  ornamentQtyInput.value = 1;
+  ornamentCustomWeight.value = 15.16;
+  weightGoldInput.value = "";
+  addonPriceGoldInput.value = 0;0
+  
+  updateGoldFormView(); 
   saveCart();
 });
 
@@ -870,7 +1038,7 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
   cart.push({
     type: "silver",
     label: "เงินแท่ง",
-    category: "เงิน",
+    category: "silver",
     customerType: document.getElementById("customerType").value,
     basePrice,
     percent,
@@ -880,14 +1048,9 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
     result: finalPrice,
     isEdited: finalPrice !== currentSilverCalculatedResult
   }); 
-
-  // ====== โค้ดล้างค่าฝั่งเงินให้กลับเป็นค่าว่าง ======
-  weightSilverInput.value = "";           // 1. เคลียร์น้ำหนักเงินให้ว่าง
-  percentSilverInput.value = "";          // 2. เคลียร์เปอร์เซ็นต์เงินให้ว่าง
-
-  calculateSilver();                      // 3. คำนวณใหม่ (ได้ผลลัพธ์ 0 เพราะน้ำหนัก/เปอร์เซ็นต์ว่าง)
-  // ===============================================
-
+  weightSilverInput.value = "";            
+  percentSilverInput.value = ""; 
+  calculateSilver();                      
   saveCart();
 });
 
@@ -989,24 +1152,6 @@ document.getElementById("previewBtn").addEventListener("click", () => {
 document.getElementById("closePreviewBtn").addEventListener("click", () => { document.getElementById("previewModal").classList.remove("show"); });
 document.getElementById("printPreviewBtn").addEventListener("click", () => { window.print(); });
 
-function resetBillAfterSave(){
-  cart = [];
-  saveCart();
-
-  const custNameEl = document.getElementById("customerName");
-  custNameEl.value = "";
-  custNameEl.dataset.address = "";
-  document.getElementById("customerPhone").value = "";
-  document.getElementById("customerLookupStatus").textContent = "";
-
-  document.getElementById("paymentMethod").value = "";
-
-  customerTypeSelect.value = "normal";
-  updateVipUI();
-  calculateGold();
-  calculateSilver();
-}
-
 async function saveTransaction(){
   if (cart.length === 0){ alert("ไม่มีรายการคำนวณในบิล"); return; }
   const paymentMethodEl = document.getElementById("paymentMethod");
@@ -1019,7 +1164,7 @@ async function saveTransaction(){
   const paymentMethodLabel = paymentMethod === "cash" ? "เงินสด" : "โอนเงิน";
   const btn = document.getElementById("saveToSheetBtn");
   btn.disabled = true; btn.textContent = "กำลังบันทึกบิลลงระบบ...";
-
+  
   const payload = {
     action: "saveTransaction",
     branch: document.getElementById("branchSelect").value,
@@ -1037,11 +1182,8 @@ async function saveTransaction(){
   try {
     const res = await fetch(SAVE_API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
     const r = await res.json();
-    if (r && r.success) {
-      alert("บันทึกข้อมูลธุรกรรมลงระบบเรียบร้อยแล้ว\nเลขที่บิล: " + (r.docId || "-"));
-      resetBillAfterSave();
-    }
-    else alert("บันทึกไม่สำเร็จ" + (r && r.error ? ": " + r.error : ""));
+    if (r && r.success) { alert("บันทึกข้อมูลธุรกรรมลงระบบเรียบร้อยแล้ว"); paymentMethodEl.value = ""; }
+    else alert("บันทึกไม่สำเร็จ");
   } catch (e) { alert("เกิดข้อผิดพลาดทางเทคนิค: " + e.message); }
   finally { btn.disabled = false; btn.textContent = "บันทึกบิลลงระบบ"; }
 }
