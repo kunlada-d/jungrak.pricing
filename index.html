@@ -496,7 +496,7 @@
 </div>
 
 <script>
-const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";
+const PROXY_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec?action=api";
 const REFRESH_MS = 20000;
 const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec";    
 const CUSTOMER_API_URL = "https://script.google.com/macros/s/AKfycbwdnCP3ujTZczfr0MN7Y3Elgw08k3XkffFh1VZPwLe-ojVp07GDv2juG5Fvz3q42l-T/exec"; 
@@ -519,6 +519,12 @@ async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error("HTTP " + res.status);
   return res.json();
+}
+
+function formatDiff(diff){
+  if (diff > 0) return "▲ +" + diff.toLocaleString("th-TH");
+  if (diff < 0) return "▼ " + diff.toLocaleString("th-TH");
+  return "0";
 }
 
 async function loadPrices() {
@@ -565,19 +571,19 @@ async function loadPrices() {
       document.getElementById("silverPrice").value = Math.trunc((cleanSilverKg / 1000) * 15.66);
     }
 
-    const todayDiff = parseFloat(String(data.gold_diff || "").replace(/,/g, '')) || 0;
+    const todayDiff = parseFloat(String(data.gold_diff || "0").replace(/,/g, '')) || 0;
     const valToday = document.getElementById("valToday");
     const valSilver = document.getElementById("valSilver");
     const gContainer = document.getElementById("goldChangeContainer");
     const sContainer = document.getElementById("silverChangeContainer");
 
     if(valToday && gContainer) {
-      valToday.innerHTML = (todayDiff > 0 ? "▲ +" : todayDiff < 0 ? "▼ " : "— ") + todayDiff.toLocaleString("th-TH");
+      valToday.innerHTML = formatDiff(todayDiff);
       gContainer.className = todayDiff > 0 ? "change-tag green-t" : todayDiff < 0 ? "change-tag red-t" : "change-tag";
     }
     if(valSilver && sContainer) {
-      const silverDiff = parseFloat(data.silver_diff) || 0;
-      valSilver.innerHTML = (silverDiff > 0 ? "▲ +" : silverDiff < 0 ? "▼ " : "— ") + silverDiff.toLocaleString("th-TH");
+      const silverDiff = parseFloat(String(data.silver_diff || "0").replace(/,/g, '')) || 0;
+      valSilver.innerHTML = formatDiff(silverDiff);
       sContainer.className = silverDiff > 0 ? "change-tag green-t" : silverDiff < 0 ? "change-tag red-t" : "change-tag";
     }
 
