@@ -534,7 +534,6 @@ async function loadPrices() {
     const cleanGoldAsk = parseFloat(String(data.gold_ask).replace(/,/g, '')) || 0;
     const cleanSilverKg = parseFloat(String(data.silver_bid_kg).replace(/,/g, '')) || 0;
     const cleanSilverAskKg = parseFloat(String(data.silver_ask_kg).replace(/,/g, '')) || 0;
-    const cleanSilverPerGram = parseFloat(data.silver_per_gram) || 0;
 
     priceEl.barBuy.textContent = cleanGoldBid.toLocaleString("th-TH") + " ฿";
     priceEl.barSell.textContent = cleanGoldAsk.toLocaleString("th-TH") + " ฿";
@@ -551,11 +550,12 @@ async function loadPrices() {
     document.getElementById("tickerSilverBuy2").textContent = cleanSilverKg.toLocaleString("th-TH") + " ฿";
     document.getElementById("tickerSilverSell2").textContent = cleanSilverAskKg.toLocaleString("th-TH") + " ฿";
 
-    if (cleanSilverPerGram > 0) {
-       priceEl.silverGram.textContent = cleanSilverPerGram.toLocaleString("th-TH") + " บาท/กรัม";
-    } else if (cleanSilverKg > 0) {
-       priceEl.silverGram.textContent = (cleanSilverKg / 1000).toLocaleString("th-TH") + " บาท/กรัม";
-    }
+   
+    if (cleanSilverKg > 0) {
+   const silverBaht = Math.trunc((cleanSilverKg / 1000) * 15.66);
+   const silverGramCalculated = Math.trunc((silverBaht - 50) * 0.99 * 0.0656);
+   priceEl.silverGram.textContent = silverGramCalculated.toLocaleString("th-TH") + " บาท/กรัม";
+}
 
     if(cleanGoldBid > 0) {
        document.getElementById("goldPerGram").textContent = Math.trunc(cleanGoldBid / 15.244).toLocaleString("th-TH") + " บาท/กรัม";
@@ -567,6 +567,7 @@ async function loadPrices() {
     if(document.getElementById("goldPrice").value == 40000 || document.getElementById("goldPrice").value == "") {
       document.getElementById("goldPrice").value = lastGoldBuyPrice;
     }
+
     if(cleanSilverKg > 0 && (document.getElementById("silverPrice").value == 900 || document.getElementById("silverPrice").value == "")) {
       document.getElementById("silverPrice").value = Math.trunc((cleanSilverKg / 1000) * 15.66);
     }
@@ -741,7 +742,7 @@ function calculateSilver() {
     const refiningCost = Math.trunc(weight * 5);
     result = Math.trunc(purchasePrice - refiningCost);
   } else {
-    pricePerGram = Math.trunc((basePrice - 50) * 0.99 * 0.0656);
+    pricePerGram =((basePrice - 50) * 0.99 * 0.0656);
     result = Math.trunc(pricePerGram * (percent / 100) * weight);
   }
 
