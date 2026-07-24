@@ -130,6 +130,7 @@
   .q-payment label{display:flex;align-items:center;gap:6px;font-size:12.5px;margin:4px 0;}
   .q-totals{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px;}
   .q-total-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;}
+  .q-total-row span:last-child{font-weight:700;}
   .q-total-row.grand{font-size:16px;font-weight:800;color:#6a0b12;background:#f5ecc9; padding:8px 10px;border-radius:8px;margin-top:4px;}
   .q-baht-text{text-align:right;font-size:11px;color:#7a6a45;font-style:italic;margin-top:2px;}
   .q-terms{border-top:1px dashed #b8902a55;padding-top:10px;font-size:11.5px;color:#7a6a45;}
@@ -388,6 +389,18 @@
   <div class="bill-panel">
     <h2>รายการรับซื้อในบิลนี้</h2>
     <div class="cart-items" id="cartItems"></div>
+    <div id="cartWeightRow" style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-charcoal); padding:6px 0;">
+      <span>น้ำหนักรวมทั้งบิล</span>
+      <span id="cartTotalWeight" style="font-weight:700;">0.00 กรัม</span>
+    </div>
+    <div id="cartSubtotalRow" style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-charcoal); padding:6px 0;">
+      <span>รวมเป็นเงิน (Subtotal)</span>
+      <span id="cartSubtotal" style="font-weight:700;">0.00 บาท</span>
+    </div>
+    <div id="cartRefineRow" style="display:none; justify-content:space-between; font-size:13px; color:#b91c1c; padding:6px 0;">
+      <span>หัก ค่า Refine (เงิน 5 บาท/กรัม)</span>
+      <span id="cartRefineAmount" style="font-weight:700;">- 0.00 บาท</span>
+    </div>
     <div class="cart-total">
       <span>ยอดรวมสุทธิจ่ายออก</span>
       <span id="cartTotal">0.00 บาท</span>
@@ -431,7 +444,7 @@
       <div class="q-shop">
         <div><img src="https://lh3.googleusercontent.com/d/1Vhd82IcG0O8DZ4QfwYyVCsCPVtVtivrd" alt="Logo" style="width: 56px; height: auto;"></div>
         <div>
-          <h2 style="color: #b8902a; margin: 0;" id="qShopTitle">จงรักหลอมทอง</h2>
+          <h2 style="color: #b8902a; margin: 0;" id="qShopTitle">จงรักหลอมทอง สาขา</h2>
         <p style="margin: 4px 0 0;">ที่อยู่ เลขที่ 30 หมู่ 13 ถนนชยางกูร ตำบลธาตุพนม อำเภอธาตุพนม จังหวัดนครพนม 48110<br>
              โทร: 092-823-9355 | LINE: @jongraknkp99</p>
         </div>
@@ -480,6 +493,7 @@
       <div class="q-totals">
         <div class="q-total-row"><span>น้ำหนักรวม (Total Weight)</span><span id="qTotalWeight">0.00 กรัม</span></div>
         <div class="q-total-row"><span>รวมเป็นเงิน (Subtotal)</span><span id="qSubtotal">0.00 บาท</span></div>
+        <div class="q-total-row" id="qRefineRow" style="display:none; color:#b91c1c;"><span>หัก ค่า Refine (เงิน 5 บาท/กรัม)</span><span id="qRefineAmount">- 0.00 บาท</span></div>
         <div class="q-total-row grand"><span>ยอดเงินสุทธิ (Net Total)</span><span id="qGrandTotal">0.00 บาท</span></div>
         <div class="q-baht-text" id="qBahtText"></div>
       </div>
@@ -738,11 +752,9 @@ function calculateSilver() {
 
   if (vip) {
     pricePerGram = Math.trunc((basePrice * (percent / 100)) * GOLD_MULTIPLIER);
-    const purchasePrice = Math.trunc(weight * pricePerGram);
-    const refiningCost = Math.trunc(weight * 5);
-    result = Math.trunc(purchasePrice - refiningCost);
+    result = Math.trunc(weight * pricePerGram);
   } else {
-    pricePerGram =((basePrice - 50) * 0.99 * 0.0656);
+    pricePerGram = ((basePrice - 50) * 0.99 * 0.0656);
     result = Math.trunc(pricePerGram * (percent / 100) * weight);
   }
 
@@ -789,7 +801,19 @@ function renderCart(){
       </div>
     `).join("");
   }
-  document.getElementById("cartTotal").textContent = formatNumber(cart.reduce((sum, i) => sum + i.result, 0)) + " บาท";
+  const totalWeight = cart.reduce((sum, i) => sum + i.weight, 0);
+  const rawTotal = cart.reduce((sum, i) => sum + i.result, 0);
+  const refineTotal = cart.reduce((sum, i) => sum + (i.refineFee || 0), 0);
+  document.getElementById("cartTotalWeight").textContent = totalWeight.toFixed(2) + " กรัม";
+  document.getElementById("cartSubtotal").textContent = formatNumber(rawTotal) + " บาท";
+  const refineRow = document.getElementById("cartRefineRow");
+  if (refineTotal > 0){
+    refineRow.style.display = "flex";
+    document.getElementById("cartRefineAmount").textContent = "- " + formatNumber(refineTotal) + " บาท";
+  } else {
+    refineRow.style.display = "none";
+  }
+  document.getElementById("cartTotal").textContent = formatNumber(rawTotal - refineTotal) + " บาท";
 }
 
 function removeItem(i){ cart.splice(i, 1); saveCart(); }
@@ -867,17 +891,20 @@ document.getElementById("addSilverToCartBtn").addEventListener("click", () => {
   if (finalPrice <= 0 || weight <= 0){ alert("น้ำหนักเงินหรือผลลัพธ์ไม่ถูกต้อง"); return; }
 
   const pGram = weight > 0 ? (finalPrice / weight) : 0;
+  const custType = document.getElementById("customerType").value;
+  const refineFee = custType === "vip" ? Math.trunc(weight * 5) : 0;
 
   cart.push({
     type: "silver",
     label: "เงินแท่ง",
     category: "เงิน",
-    customerType: document.getElementById("customerType").value,
+    customerType: custType,
     basePrice,
     percent,
     addon: 0,
     pricePerGram: pGram,
     weight,
+    refineFee,
     result: finalPrice,
     isEdited: finalPrice !== currentSilverCalculatedResult
   }); 
@@ -978,10 +1005,19 @@ document.getElementById("previewBtn").addEventListener("click", () => {
   `).join("");
 
   const totalWeight = cart.reduce((s, i) => s + i.weight, 0);
-  const total = cart.reduce((s, i) => s + i.result, 0);
+  const subtotal = cart.reduce((s, i) => s + i.result, 0);
+  const refineTotal = cart.reduce((s, i) => s + (i.refineFee || 0), 0);
+  const total = subtotal - refineTotal;
 
   document.getElementById("qTotalWeight").textContent = totalWeight.toFixed(2) + " กรัม";
-  document.getElementById("qSubtotal").textContent = formatNumber(total) + " บาท";
+  document.getElementById("qSubtotal").textContent = formatNumber(subtotal) + " บาท";
+  const qRefineRow = document.getElementById("qRefineRow");
+  if (refineTotal > 0){
+    qRefineRow.style.display = "flex";
+    document.getElementById("qRefineAmount").textContent = "- " + formatNumber(refineTotal) + " บาท";
+  } else {
+    qRefineRow.style.display = "none";
+  }
   document.getElementById("qGrandTotal").textContent = formatNumber(total) + " บาท";
   document.getElementById("qBahtText").textContent = "(" + ThaiBahtText(total) + ")";
   document.getElementById("previewModal").classList.add("show");
@@ -1031,7 +1067,7 @@ async function saveTransaction(){
     customerPhone: document.getElementById("customerPhone").value.trim(),
     date: new Date().toISOString(),
     totalWeight: cart.reduce((s, i) => s + i.weight, 0),
-    totalAmount: cart.reduce((s, i) => s + i.result, 0),
+    totalAmount: cart.reduce((s, i) => s + i.result, 0) - cart.reduce((s, i) => s + (i.refineFee || 0), 0),
     items: cart
   };
 
